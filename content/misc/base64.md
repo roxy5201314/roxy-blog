@@ -73,8 +73,6 @@ abcdefghijklmnopqrstuvwxyz
 
 Man
 
-复制代码
-
 对应 ASCII（二进制）：
 
 M -> 01001101
@@ -176,6 +174,7 @@ Base大家族(91,58,85,100)😷
 它往往只是“外壳”。
 
 常用工具
+
 LINUX命令行
 
 echo "TWFu" | base64 -d
@@ -188,6 +187,7 @@ s = "TWFu"
 print(base64.b64decode(s).decode())
 
 CyberChef（强烈推荐）😎
+
 自动识别
 
 可链式操作
@@ -217,6 +217,8 @@ Base64 不是加密，只是编码
 作用是把二进制变成可打印字符
 
 CTF 中极常见，经常是第一步!
+
 over~ 😎
+
 感谢阅读!😎
 </div>
