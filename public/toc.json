@@ -60,6 +60,16 @@
   },
   {
     "id": "misc",
-    "items": []
+    "items": [
+      {
+        "section": "misc",
+        "slug": "base64",
+        "title": "Base64 是什么？",
+        "excerpt": "不是加密，是编码，但它在 CTF 里无处不在",
+        "date": "2025-12-09",
+        "id": "misc-base64",
+        "path": "/articles/misc-base64.html"
+      }
+    ]
   }
 ]
