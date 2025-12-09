@@ -219,7 +219,7 @@ export default function Page() {
                     return (
                       <li key={id} className="relative">
                         <button
-                          ref={el => (buttonRefs.current[id] = el)}
+                          ref={el => { buttonRefs.current[id] = el; }}
                           onClick={e => handleJump(group.id, { ...it, section: group.id }, e)}
                           aria-current={activeId === id ? 'true' : undefined}
                           aria-label={`Jump to ${it.title}`}

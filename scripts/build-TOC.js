@@ -5,13 +5,17 @@ const fg = require('fast-glob');
 const matter = require('gray-matter');
 const MarkdownIt = require('markdown-it');
 
+// require the katex plugin (ensure you installed markdown-it-katex and katex)
+const mdKatex = require('markdown-it-katex');
+
 (async function build() {
   try {
+    // create markdown-it instance and use the katex plugin
     const md = new MarkdownIt({
       html: true,
       linkify: true,
       typographer: true,
-    });
+    }).use(mdKatex); // <= make sure plugin is registered
 
     const files = await fg('content/**/*.md');
     const items = [];
@@ -27,7 +31,7 @@ const MarkdownIt = require('markdown-it');
 
       const id = `${section}-${slug}`.replace(/\s+/g, '-').toLowerCase();
 
-      // convert md -> html using markdown-it (CommonJS-friendly)
+      // convert md -> html using markdown-it with katex support
       const htmlContent = md.render(content);
 
       // write article HTML into public/articles/<id>.html
