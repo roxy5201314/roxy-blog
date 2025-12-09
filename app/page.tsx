@@ -196,9 +196,10 @@ export default function Page() {
   };
 
   const renderNav = () => (
-    <nav className="bg-white/70 backdrop-blur rounded-lg p-3 shadow-sm relative overflow-hidden">
-      <h2 className="font-semibold mb-3">目录</h2>
-      <ul className="space-y-2 relative">
+    // 使用更友好的无衬线字体、调大字号并增加行高让目录更舒服
+    <nav className="bg-white/80 backdrop-blur rounded-lg p-4 shadow-sm relative overflow-hidden font-sans text-base leading-6">
+      <h2 className="font-semibold mb-3 text-lg">目录</h2>
+      <ul className="space-y-3 relative">
         <div
           aria-hidden
           className="absolute left-0 w-1 rounded-full bg-indigo-600 shadow-md transition-all duration-300"
@@ -212,7 +213,7 @@ export default function Page() {
           if (group.items && group.items.length > 0) {
             return (
               <li key={group.id} className="mb-2">
-                <div className="text-xs uppercase font-medium text-gray-500 mb-1 px-1">{group.id}</div>
+                <div className="text-sm uppercase font-medium text-gray-500 mb-1 px-1">{group.id}</div>
                 <ul className="space-y-1">
                   {group.items.map(it => {
                     const id = makeId({ ...it, section: group.id });
@@ -223,8 +224,8 @@ export default function Page() {
                           onClick={e => handleJump(group.id, { ...it, section: group.id }, e)}
                           aria-current={activeId === id ? 'true' : undefined}
                           aria-label={`Jump to ${it.title}`}
-                          className={`w-full text-left px-2 py-1 rounded-md text-sm relative overflow-hidden transition
-                            ${activeId === id ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                          className={`w-full text-left px-3 py-2 rounded-md text-base relative overflow-hidden transition
+                            ${activeId === id ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'}`}
                         >
                           <span className="inline-block transform transition-transform duration-150">{it.title}</span>
                           <span className="sr-only">{it.excerpt}</span>
@@ -244,8 +245,8 @@ export default function Page() {
                   onClick={e => handleJump(placeholderId, undefined, e)}
                   aria-current={activeId === placeholderId ? 'true' : undefined}
                   aria-label={`Jump to ${group.id}`}
-                  className={`w-full text-left px-2 py-1 rounded-md text-sm relative overflow-hidden transition
-                    ${activeId === placeholderId ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`w-full text-left px-3 py-2 rounded-md text-base relative overflow-hidden transition
+                    ${activeId === placeholderId ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'}`}
                 >
                   <span className="inline-block transform transition-transform duration-150">
                     {group.id === 'introduction' ? 'Introduction' : group.id}
@@ -259,7 +260,7 @@ export default function Page() {
 
       {preview && (
         <div
-          className="absolute right-2 top-0 transform translate-y-0 p-3 rounded-md bg-white shadow-lg text-xs max-w-xs animate-slide-in"
+          className="absolute right-2 top-0 transform translate-y-0 p-3 rounded-md bg-white shadow-lg text-sm max-w-xs animate-slide-in font-sans"
           style={{ top: preview.y }}
         >
           <div className="font-medium text-gray-800">Preview</div>
@@ -275,8 +276,12 @@ export default function Page() {
       return (
         <section key={id} id={id} tabIndex={-1} className="scroll-mt-20">
           <h2 className="text-2xl font-bold">{item.title}</h2>
-          <p className="text-gray-600 text-sm mt-1">{item.excerpt}</p>
-          <p className="mt-4">enjoy your read!😎😎😎</p>
+          {/* 这里把 excerpt 放大并使用更舒服的行高和无衬线字体 */}
+          <p className="text-gray-600 text-lg md:text-xl mt-2 font-light leading-relaxed font-sans">{item.excerpt}</p>
+
+          {/* 将 "enjoy your read!" 放大并优化字重与行距 */}
+          <p className="mt-6 text-lg md:text-2xl font-medium tracking-tight font-sans leading-relaxed">enjoy your read!😎😎😎</p>
+
           <div className="mt-4 bg-white/40 rounded-lg p-4">
             {articleHtml[id] ? (
               <div dangerouslySetInnerHTML={{ __html: articleHtml[id] }} />
@@ -330,6 +335,10 @@ export default function Page() {
         button.pressed { transform: translateY(1px) scale(0.996); transition: transform 160ms ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(8px) translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateX(0) translateY(0) scale(1); } }
         .animate-slide-in { animation: slideIn 260ms ease; }
+
+        /* small polish: make the nav scrollbar less noisy */
+        nav::-webkit-scrollbar { width: 8px; height: 8px; }
+        nav::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 9999px; }
       `}</style>
     </div>
   );

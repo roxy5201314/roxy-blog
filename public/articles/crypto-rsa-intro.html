@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RSA 简明教程</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="crypto-rsa-intro">
+<div class="intro-article">
+<p>这是一个简明的 RSA 导读，既讲数学，也讲直觉 —— 面向 <strong>CTF 入门友好</strong>。</p>
+<hr>
+<h2>✅ 第一步：选两个大素数</h2>
+<p>选两个大素数 <strong><code>p</code></strong> 和 <strong><code>q</code></strong>。</p>
+<hr>
+<h2>✅ 第二步：计算模数（模就是“圈”）</h2>
+<p><strong>公式：</strong></p>
+<blockquote>
+<p><strong>n = p × q</strong></p>
+</blockquote>
+<p>这个 <strong><code>n</code></strong> 会同时出现在公钥和私钥中。</p>
+<hr>
+<h2>✅ 第三步：计算 Euler 函数（数学地基）</h2>
+<p><strong>公式：</strong></p>
+<blockquote>
+<p><strong>φ(n) = (p − 1)(q − 1)</strong></p>
+</blockquote>
+<p>这是 RSA 的核心数学基础。</p>
+<hr>
+<h2>✅ 第四步：选公钥指数</h2>
+<p>选择一个整数 <strong><code>e</code></strong>，满足：</p>
+<ul>
+<li><strong>1 &lt; e &lt;div φ(n)</strong></li>
+<li><strong>gcd(e, φ(n)) = 1</strong></li>
+</ul>
+<p>在 CTF 和现实系统中，几乎总能看到：</p>
+<blockquote>
+<p><strong>e = 65537</strong></p>
+</blockquote>
+<p>因为它 <strong>速度快、实现成熟、安全性好（在正常前提下）</strong>。</p>
+<hr>
+<h2>✅ 第五步：求私钥指数</h2>
+<p>我们需要找到 <strong><code>d</code></strong>，使得：</p>
+<blockquote>
+<p><strong>e · d ≡ 1 (mod φ(n))</strong></p>
+</blockquote>
+<p>这一步的本质是：<br>
+<strong>求 e 在模 φ(n) 意义下的乘法逆元</strong></p>
+<blockquote>
+<p><strong>d = e⁻¹ (mod φ(n))</strong></p>
+</blockquote>
+<hr>
+<h2>🔒 加密 / 解密（对称而优雅）</h2>
+<h3>🔐 加密</h3>
+<p>明文 <strong><code>m</code></strong> 被加密成密文 <strong><code>c</code></strong>：</p>
+<blockquote>
+<p><strong>c ≡ mᵉ (mod n)</strong></p>
+</blockquote>
+<hr>
+<h3>🔓 解密</h3>
+<p>密文 <strong><code>c</code></strong> 用私钥还原为明文 <strong><code>m</code></strong>：</p>
+<blockquote>
+<p><strong>m ≡ cᵈ (mod n)</strong></p>
+</blockquote>
+<hr>
+<h2>🤔 为什么能还原？</h2>
+<p>背后的数学依据是 <strong>Euler 定理（或更严格的 RSA 定理）</strong>：</p>
+<blockquote>
+<p><strong>m^{φ(n)} ≡ 1 (mod n)</strong></p>
+</blockquote>
+<p>RSA 巧妙地构造参数，使得：</p>
+<blockquote>
+<p><strong>(mᵉ)ᵈ ≡ m (mod n)</strong></p>
+</blockquote>
+<hr>
+<h2>✅ 小结</h2>
+<ul>
+<li>
+<p>RSA 的安全性依赖于 <strong>大整数分解的困难性</strong></p>
+</li>
+<li>
+<p>核心只有两条公式：</p>
+<blockquote>
+<p><strong>加密：c ≡ mᵉ (mod n)</strong><br>
+<strong>解密：m ≡ cᵈ (mod n)</strong></p>
+</blockquote>
+</li>
+</ul>
+<p>如果你愿意，下一篇我可以直接写 <strong>CTF 中的 RSA 攻击套路</strong>：<br>
+<strong>小 e / 共模 / φ 泄露 / Fermat 分解</strong> —— 全实战，无废话。🚀</p>
+</div>
+</div>
+</body>
+</html>

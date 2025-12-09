@@ -1,8 +1,49 @@
 @import "tailwindcss";
 
+.katex-display {
+  text-align: center;
+}
+
+.katex {
+  font-size: 1.05em;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/* 介绍类文章样式 */
+.intro-article {
+  max-width: 850px;          /* 控制阅读宽度 */
+  margin: 0 auto;            /* 水平居中 */
+  padding: 2rem 1.2rem;
+
+  font-size: 18px;           /* 字体略大 */
+  line-height: 1.9;          /* 呼吸感 */
+  
+  font-family:
+    "Inter",
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    sans-serif;
+}
+
+/* 标题稍微居中更有仪式感 */
+.intro-article h1,
+.intro-article h2 {
+  text-align: center;
+}
+
+/* 引用块更舒服一点 */
+.intro-article blockquote {
+  font-style: italic;
+  border-left: 4px solid #ffd43b;
+  background: rgba(255, 212, 59, 0.08);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
 }
 
 @theme inline {
