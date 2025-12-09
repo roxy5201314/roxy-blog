@@ -31,7 +31,7 @@ Ubuntu：https://cn.ubuntu.com/download
 
 到这里
 
-恭喜你!🎇🎇
+> 恭喜你!🎇🎇
 
 欢迎来到安全的主战场-linux系统
 
@@ -65,11 +65,11 @@ less more tail head id whoami ps nc...
 
 **常用**
 
-file   checksec   readelf   objdump   strings
+> file   checksec   readelf   objdump   strings
 
 0 stdin  1 stdout  2 stderr
 
-> (重定向)   | (pipe)...
+>  < >  (重定向)   |   (pipe)...
 
 ## 3.你所需要的工具
 
