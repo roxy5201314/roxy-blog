@@ -21,11 +21,9 @@ section: "pwn"
 
 照着装就行了😀
 
-直接给你网址吧!😎
-
-- [VMWARE](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)
-
-- [Ubuntu](https://cn.ubuntu.com/download)
+直接给你网址吧 😎  
+VMWARE：https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion  
+Ubuntu：https://cn.ubuntu.com/download
 
 到这里
 
