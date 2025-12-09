@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Base64 是什么？</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="misc-base64">
+<div class="intro-article">
+<h2>Base64 是什么？</h2>
+<p>关键:</p>
+<blockquote>
+<p><strong>Base64 不是加密，它只是编码。</strong></p>
+</blockquote>
+<p>它的作用非常朴素：<br>
+👉 <strong>把任意二进制数据，用“可打印字符”表示出来。</strong></p>
+<hr>
+<h2>为什么需要 Base64？</h2>
+<p>计算机中的数据本质是 <strong>二进制 0 / 1</strong>，<br>
+但很多场景 <strong>不适合直接传二进制</strong>，比如：</p>
+<ul>
+<li>URL 参数</li>
+<li>HTTP 表单</li>
+<li>JSON / XML</li>
+<li>邮件（SMTP）</li>
+<li>一些只允许 ASCII 的系统</li>
+</ul>
+<p>于是就需要把：</p>
+<blockquote>
+<p><strong>二进制 → 可打印字符</strong></p>
+</blockquote>
+<p>Base64 就是为这个而生的。</p>
+<hr>
+<h2>Base64 的字符集</h2>
+<p>Base64 一共使用 <strong>64 个字符</strong>：</p>
+<p>ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+0123456789+/</p>
+<p>再加一个特殊的填充符号：</p>
+<p>=</p>
+<hr>
+<h2>Base64 在“数学上”做了什么？</h2>
+<p>核心思想其实很简单：</p>
+<ul>
+<li>每 <strong>3 个字节 = 24 bit</strong></li>
+<li>每 <strong>6 bit 一组</strong></li>
+<li>24 bit ÷ 6 bit = <strong>4 组</strong></li>
+<li>每组 6 bit → 映射成一个 Base64 字符</li>
+</ul>
+<p>也就是：</p>
+<blockquote>
+<p><strong>3 字节 → 4 个 Base64 字符</strong></p>
+</blockquote>
+<hr>
+<h2>一个直观例子</h2>
+<p>字符串：</p>
+<p>Man</p>
+<p>复制代码</p>
+<p>对应 ASCII（二进制）：</p>
+<p>M -&gt; 01001101
+a -&gt; 01100001
+n -&gt; 01101110</p>
+<p>拼起来（24 bit）：</p>
+<p>010011010110000101101110</p>
+<p>每 6 bit 分组：</p>
+<p>010011 010110 000101 101110</p>
+<p>转成十进制：</p>
+<p>19 22 5 46</p>
+<p>查 Base64 表：</p>
+<p>T W F u</p>
+<p>✅ 结果：</p>
+<p>Man → TWFu</p>
+<hr>
+<h2>为什么会有 <code>=</code> 填充符？</h2>
+<p>如果原始数据 <strong>不是 3 的倍数</strong>：</p>
+<ul>
+<li>剩 2 字节 → 补 1 个 <code>=</code></li>
+<li>剩 1 字节 → 补 2 个 <code>=</code></li>
+</ul>
+<p>作用只有一个：</p>
+<blockquote>
+<p><strong>凑够 4 字符一组</strong></p>
+</blockquote>
+<p>举例：</p>
+<p>Ma → TWE=
+M → TQ==</p>
+<hr>
+<h2>在 CTF 中 Base64 的常见出现形式</h2>
+<h3>✅ 1️⃣ 最简单：一眼 Base64</h3>
+<p>特征非常明显：</p>
+<ul>
+<li>只包含 <code>A–Z a–z 0–9 + / =</code></li>
+<li>长度通常是 4 的倍数</li>
+</ul>
+<p>例如：</p>
+<p>ZmxhZ3tqdXN0X2RlY29kZX0=</p>
+<p>👉 解码一下：</p>
+<p>flag{just_decode}😎😎😎</p>
+<hr>
+<h3>✅ 2️⃣ 套娃型 Base64</h3>
+<p>CTF 里非常常见：</p>
+<p>Base64 → Base64 → Base64 → 明文
+甚至会出现：</p>
+<p>偷偷换行</p>
+<p>去掉 =</p>
+<p>混一点别的字符</p>
+<p>倒序</p>
+<p>这种时候AI就不管用了，AI小哥哥只会暴力破解</p>
+<p>你需要自己根据已知的flag形式去深入分析可能存在的变化</p>
+<p>所以理解原理是十分必要的</p>
+<p>要善于利用AI，但不能完全依赖AI而丧失自主的思考</p>
+<p>✅ 3️⃣ 和其他编码一起出现
+例如：</p>
+<p>Base64 + URL 编码</p>
+<p>Base64 + XOR(异或)</p>
+<p>Base大家族(91,58,85,100)😷</p>
+<p>看到 Base64 不要以为结束了，
+它往往只是“外壳”。</p>
+<p>常用工具
+LINUX命令行</p>
+<p>echo “TWFu” | base64 -d</p>
+<p>Python（CTF 最常用）</p>
+<p>import base64</p>
+<p>s = “TWFu”
+print(base64.b64decode(s).decode())</p>
+<p>CyberChef（强烈推荐）😎
+自动识别</p>
+<p>可链式操作</p>
+<p>非常适合套娃编码</p>
+<p><strong>一个 CTF 重要提醒</strong> ⚠️
+Base64 ≠ 密码学安全</p>
+<p>任何能看到密文的人：</p>
+<p>都可以直接解码</p>
+<p>不需要密钥</p>
+<p>不需要破解</p>
+<p>所以在 CTF 中它更多是：</p>
+<p>✅ 迷惑
+✅ 外壳
+✅ 编码链的一环</p>
+<p>小结 ✅
+Base64 不是加密，只是编码</p>
+<p>作用是把二进制变成可打印字符</p>
+<p>CTF 中极常见，经常是第一步!
+over~ 😎
+感谢阅读!😎</p>
+</div>
+</div>
+</body>
+</html>
