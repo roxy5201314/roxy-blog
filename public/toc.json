@@ -50,8 +50,8 @@
       {
         "section": "crypto",
         "slug": "rsa-intro",
-        "title": "RSA 简明教程",
-        "excerpt": "公钥 / 私钥的数学与直觉（CTF 入门）",
+        "title": "what is RSA?",
+        "excerpt": "公钥与私钥",
         "date": "2025-12-09",
         "id": "crypto-rsa-intro",
         "path": "/articles/crypto-rsa-intro.html"

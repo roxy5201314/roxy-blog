@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RSA 简明教程</title>
+<title>what is RSA?</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 </head>
 <body>
 <div class="article-content" data-id="crypto-rsa-intro">
 <div class="intro-article">
-<p>这是一个简明的 RSA 导读，既讲数学，也讲直觉 —— 面向 <strong>CTF 入门友好</strong>。</p>
-<hr>
+<h2>简单介绍一下现代非对称加密算法 ——  <strong>RSA</strong>。
+核心逻辑：极大整数的难分解性!</h2>
 <h2>✅ 第一步：选两个大素数</h2>
-<p>选两个大素数 <strong><code>p</code></strong> 和 <strong><code>q</code></strong>。</p>
+<p>选两个超级大的素数 <strong><code>p</code></strong> 和 <strong><code>q</code></strong>。</p>
 <hr>
-<h2>✅ 第二步：计算模数（模就是“圈”）</h2>
+<h2>✅ 第二步：计算模数（Modulus）</h2>
 <p><strong>公式：</strong></p>
 <blockquote>
 <p><strong>n = p × q</strong></p>
 </blockquote>
 <p>这个 <strong><code>n</code></strong> 会同时出现在公钥和私钥中。</p>
 <hr>
-<h2>✅ 第三步：计算 Euler 函数（数学地基）</h2>
+<h2>✅ 第三步：计算 Euler 函数（欧拉函数）</h2>
 <p><strong>公式：</strong></p>
 <blockquote>
 <p><strong>φ(n) = (p − 1)(q − 1)</strong></p>
@@ -73,6 +73,7 @@
 <blockquote>
 <p><strong>(mᵉ)ᵈ ≡ m (mod n)</strong></p>
 </blockquote>
+<p>ps:CHATGPT生成，我也不懂原理…</p>
 <hr>
 <h2>✅ 小结</h2>
 <ul>
@@ -87,8 +88,7 @@
 </blockquote>
 </li>
 </ul>
-<p>如果你愿意，下一篇我可以直接写 <strong>CTF 中的 RSA 攻击套路</strong>：<br>
-<strong>小 e / 共模 / φ 泄露 / Fermat 分解</strong> —— 全实战，无废话。🚀</p>
+<p>That’s end~ 😎😎😎</p>
 </div>
 </div>
 </body>
