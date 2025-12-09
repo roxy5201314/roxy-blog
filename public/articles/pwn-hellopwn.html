@@ -8,9 +8,11 @@
 </head>
 <body>
 <div class="article-content" data-id="pwn-hellopwn">
+<div class="intro-article">
 <h1>欢迎来到PWN的世界</h1>
 <p><em><strong>你需要什么?</strong></em></p>
 <h2>1.既然来到了这里，想必你已经在自己的电脑上安装好了任意型号(Ubuntu/Debian…)的linux系统</h2>
+<p>如果还没有</p>
 <p>操作也是非常简单</p>
 <p>推荐先使用 <em>VMWARE虚拟机</em> 和 <em>Ubuntu</em> 系统</p>
 <p>对新手友好</p>
@@ -22,9 +24,53 @@ Ubuntu：<a href="https://cn.ubuntu.com/download">https://cn.ubuntu.com/download
 <p>恭喜你!🎇🎇</p>
 <p>欢迎来到安全的主战场-linux系统</p>
 <h2>2.你所需要的知识</h2>
+<ul>
+<li>
+<p>什么是ELF文件?🥰</p>
+</li>
+<li>
+<p>基础汇编语言(lea,je,jne,leave,ret,call,mov,sub,pop,push…)</p>
+</li>
+</ul>
+<p>能看懂一点就行</p>
+<ul>
+<li>通用寄存器调用约定(rdi,rsi,rdx,rcx,r8,r9…)</li>
+</ul>
+<p>先有个印象</p>
+<ul>
+<li>认识你最需要关注的三个东西(rbp,rsp,<em><strong>rip</strong></em>)</li>
+</ul>
+<p><strong>控制程序执行流的关键</strong></p>
+<ul>
+<li>c语言🙄🙄</li>
+</ul>
+<p>每次写代码时都想想在最底层的内存地址上发生着哪些变化…</p>
+<ul>
+<li>linux基本命令</li>
+</ul>
+<p>我列举一些，慢慢学吧，可以问问豆包☺️</p>
+<p>cd  ls  mv  rm  cp  mkdir  pwd  cat  vim/nano</p>
+<p>less more tail head id whoami ps nc…</p>
+<p><strong>常用</strong></p>
+<p>file   checksec   readelf   objdump   strings</p>
+<p>0 stdin  1 stdout  2 stderr</p>
+<blockquote>
+<p>(重定向)   | (pipe)…</p>
+</blockquote>
 <h2>3.你所需要的工具</h2>
+<ul>
+<li>
+<p>python环境  并安装<strong>pwntools</strong>库</p>
+</li>
+<li>
+<p>gdb 搭配 <em>pwndbg</em>(调试,难题必备)</p>
+</li>
+<li>
+<p>ghidra/ida pro(反汇编)</p>
+</li>
+</ul>
 <p>ps:只能推荐本人使用过的，因为我也是新手TTqwq😭😭</p>
-
+</div>
 </div>
 </body>
 </html>
