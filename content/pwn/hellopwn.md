@@ -35,15 +35,15 @@ Ubuntu：https://cn.ubuntu.com/download
 
 欢迎来到安全的主战场-linux系统
 
-##  <span style="color:#ffcc00">你所需要的知识</span>
+##  <span style="color:#ffcc00">2.你所需要的知识</span>
 
 - 什么是ELF文件?🥰
 
-- 基础汇编语言(lea,je,jne,leave,ret,call,mov,sub,pop,push...)
+- 基础汇编语言(lea,je,jne,leave,ret,call,mov,sub,add,pop,push...)
 
 能看懂一点就行
 
-- 通用寄存器调用约定(rdi,rsi,rdx,rcx,r8,r9...)
+- 通用寄存器调用约定(rdi,rsi,rdx,rax,r10,r8,r9...)
 
 先有个印象
 
@@ -61,7 +61,7 @@ Ubuntu：https://cn.ubuntu.com/download
 
 cd  ls  mv  rm  cp  mkdir  pwd  cat  vim/nano
 
-less more tail head id whoami ps nc...
+less more tail head id whoami ps nc chmod...
 
 **常用**
 
