@@ -112,10 +112,12 @@ q = p + g   （g 很小）
 得到 p、q 后：
 
 > n = p * q
+
 > m = pow(c, d, n)
+
 > flag = long_to_bytes(m)
 
-即可得到最终 flag。😜😜
+即可得到最终 flag!😜😜
 
 ## 最终脚本☺️
 
@@ -192,7 +194,9 @@ good!😍😍😍
 
 其中：
 
-> a=⌈$\sqrt{n}$​⌉
+> a=⌈sqrt(n)​⌉
+
+不会装latex插件，见谅😭😭😭😭
 
 且:
 

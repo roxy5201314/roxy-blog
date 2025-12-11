@@ -85,11 +85,15 @@ d = 2587033034158764455750626942590486200509176127009824643702733649840498668482
 <p>✔ Step 3：解密密文</p>
 <p>得到 p、q 后：</p>
 <blockquote>
-<p>n = p * q
-m = pow(c, d, n)
-flag = long_to_bytes(m)</p>
+<p>n = p * q</p>
 </blockquote>
-<p>即可得到最终 flag。😜😜</p>
+<blockquote>
+<p>m = pow(c, d, n)</p>
+</blockquote>
+<blockquote>
+<p>flag = long_to_bytes(m)</p>
+</blockquote>
+<p>即可得到最终 flag!😜😜</p>
 <h2>最终脚本☺️</h2>
 <pre><code class="language-python">//exploit.py
 from Crypto.Util.number import *
@@ -160,8 +164,9 @@ for t in range(1, 20000):
 </blockquote>
 <p>其中：</p>
 <blockquote>
-<p>a=⌈<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msqrt><mrow><mi>n</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8002800000000001em;"></span><span class="strut bottom" style="height:1.04em;vertical-align:-0.23972em;"></span><span class="base textstyle uncramped"><span class="sqrt mord"><span class="sqrt-sign" style="top:0.03971999999999998em;"><span class="style-wrap reset-textstyle textstyle uncramped">√</span></span><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">n</span></span></span><span style="top:-0.72028em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped sqrt-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span>​</span></span></span></span></span></span>​⌉</p>
+<p>a=⌈sqrt(n)​⌉</p>
 </blockquote>
+<p>不会装latex插件，见谅😭😭😭😭</p>
 <p>且:</p>
 <blockquote>
 <p>b^2=a^2−n</p>
