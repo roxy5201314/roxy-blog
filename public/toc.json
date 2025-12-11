@@ -18,6 +18,15 @@
     "items": [
       {
         "section": "pwn",
+        "slug": "protection",
+        "title": "现代保护机制",
+        "excerpt": "魔高一尺，道高一丈，攻防也是如此，有攻亦有防",
+        "date": "2025-12-09",
+        "id": "pwn-protection",
+        "path": "/articles/pwn-protection.html"
+      },
+      {
+        "section": "pwn",
         "slug": "hellopwn",
         "title": "pwn入门",
         "excerpt": "pwn所需的工具和环境搭建",

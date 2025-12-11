@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>现代保护机制</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="pwn-protection">
+<div class="intro-article">
+<p>上一篇我们实现了简单的overflow以hijack程序执行流</p>
+<p>但是:</p>
+<p><span style="color:#845ef7">真的就这么简单吗?</span></p>
+<p>显然不是😄😄</p>
+<p>还记得上一篇编译时的这个语句吗</p>
+<blockquote>
+<p>gcc -g -fno-stack-protector -z execstack -no-pie ezoverflow.c -o ezoverflow</p>
+</blockquote>
+<p>为了方便演示，这条语句实际上关闭了许多程序保护措施</p>
+<p>现在就让我们一个一个来看看为了防护二进制漏洞</p>
+<p><span style="color:#845ef7">现代防御系统都存在着哪些机制</span></p>
+</div>
+</div>
+</body>
+</html>
