@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>来做一道RSA入门题吧!</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="crypto-rsa-example">
+<div class="intro-article">
+<h1><strong>相当于我的题解</strong>😂😂</h1>
+<p>先给出题目:</p>
+<pre><code class="language-python">//cipher.py
+from Crypto.Util.number import * 
+from gmpy2 import * 
+with open(&quot;/home/ctf/flag&quot;, &quot;r&quot;) as f: 
+flag = f.read().strip().encode() 
+m = bytes_to_long(flag) 
+p = getPrime(512) 
+q = next_prime(p) 
+n = p * q 
+e = 0x10001 
+d = inverse(e, (p-1) * (q-1)) 
+c = pow(m, e, n) 
+print(f&quot;c = {c}&quot;) 
+print(f&quot;d = {d}&quot;) 
+c = 2382475417612221029195991422974637682790907959505872057612789600021232022809557015773490645186824472471102983790148757867812357803783967352960757619002038826907060092309775753732723354584179093707192435729752294617650638277041714861100817616820264627123087547545127802637327100886413921708433926850797315065 
+d = 25870330341587644557506269425904862005091761270098246437027336498404986684820747768161278804893693431118462970977749986507893638555530406810784167861241466417073720713120287069835276598399825459462715213456508074868393454518636408061277002175376013587646496781389777927884174769153760862313567065511810387073
+</code></pre>
+<h2>分析题目逻辑:</h2>
+<p>1️⃣ 泄露了私钥指数 d</p>
+<p>在 RSA 中，有：</p>
+<blockquote>
+<p>ed≡1(modφ(n))</p>
+</blockquote>
+<p>因此必然存在整数 k，使得：</p>
+<blockquote>
+<p>ed−1=k⋅φ(n)</p>
+</blockquote>
+<p>这意味着我们可以通过 k = e*d - 1 来构造所有可能的 φ(n)。</p>
+<p>2️⃣ p 和 q 是<strong>相邻素数</strong></p>
+<p>本题中：</p>
+<blockquote>
+<p>q = next_prime(p)</p>
+</blockquote>
+<p>因此：</p>
+<p>p、q 极为接近</p>
+<p>q - p = g 很小（一般 &lt; 1000）</p>
+<p>这使得 φ(n) 的形式：</p>
+<blockquote>
+<p>φ(n)=(p−1)(q−1)</p>
+</blockquote>
+<p>可以展开成一个关于 p 的二次方程，枚举 g 就能把 p 解出来。</p>
+<h2>🧠 解题整体思路</h2>
+<p>✔ Step 1：根据 d 求出 φ(n) 候选</p>
+<p>计算：</p>
+<blockquote>
+<p>k=ed−1</p>
+</blockquote>
+<p>因为：</p>
+<blockquote>
+<p>k=t⋅φ(n)</p>
+</blockquote>
+<p>我们只需要枚举 k 的 小因子 t：</p>
+<blockquote>
+<p>φ=k/t</p>
+</blockquote>
+<p>即可得到所有 φ(n) 的可能值。</p>
+<p>✔ Step 2：利用 q = next_prime(p) 求 p</p>
+<p>已知：</p>
+<p>q = p + g   （g 很小）</p>
+<p>φ = (p-1)(p+g-1)</p>
+<p>展开：</p>
+<blockquote>
+<p>𝑝^2+(𝑔−2)𝑝+(1-𝑔)−𝜑=0</p>
+</blockquote>
+<p>这是一个标准二次方程。</p>
+<p>对每个 g（0~2000）：</p>
+<p>1.解方程得到 p</p>
+<p>2.判断 p 是否为素数</p>
+<p>3.q 是否等于 next_prime(p)</p>
+<p>4.是否满足 φ = (p-1)(q-1)</p>
+<p>若全部符合 =&gt; 成功分解 n。</p>
+<p>✔ Step 3：解密密文</p>
+<p>得到 p、q 后：</p>
+<blockquote>
+<p>n = p * q
+m = pow(c, d, n)
+flag = long_to_bytes(m)</p>
+</blockquote>
+<p>即可得到最终 flag。😜😜</p>
+<h2>最终脚本☺️</h2>
+<pre><code class="language-python">//exploit.py
+from Crypto.Util.number import *
+from gmpy2 import is_prime, iroot, next_prime
+#见题目
+c = 2382475417612221029195991422974637682790907959505872057612...
+d = 2587033034158764455750626942590486200509176127009824643...
+e = 65537
+
+k = e*d - 1
+
+# 枚举小因子
+for t in range(1, 20000):
+    if k % t != 0:
+        continue
+
+    phi = k // t
+
+    # 枚举 g = q - p
+    for g in range(1, 2000):
+        # 二次方程: p^2 + (g-2)p + (1-g) - phi = 0
+        a = 1
+        b = g - 2
+        c2 = (1 - g) - phi
+
+        # 求 Δ
+        D = b*b - 4*a*c2
+        if D &lt; 0:
+            continue
+
+        r, ok = iroot(D, 2)
+        if not ok:
+            continue
+
+        # 求解 p
+        p = (-b + r) // 2
+        if p &lt;= 0:
+            continue
+
+        if not is_prime(p):
+            continue
+
+        q = next_prime(p)
+        if (p-1)*(q-1) != phi:
+            continue
+
+        print(&quot;[+] Found p =&quot;, p)
+        print(&quot;[+] Found q =&quot;, q)
+
+        n = p*q
+        m = pow(c, d, n)
+        print(long_to_bytes(m))
+        exit()
+</code></pre>
+<p>得到:</p>
+<blockquote>
+<p>XSWCTF{YOu_KnOW_H0w_To_f4CTOrIZe_PHl}</p>
+</blockquote>
+<p>good!😍😍😍</p>
+<h2>补充解法:<strong>Fermat 分解</strong></h2>
+<p>当：</p>
+<blockquote>
+<p>q−p 很小</p>
+</blockquote>
+<p>就可以用 费马分解法(Fermat 分解)：</p>
+<blockquote>
+<p>n=a^2−b^2=(a−b)(a+b)</p>
+</blockquote>
+<p>其中：</p>
+<blockquote>
+<p>a=⌈<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msqrt><mrow><mi>n</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8002800000000001em;"></span><span class="strut bottom" style="height:1.04em;vertical-align:-0.23972em;"></span><span class="base textstyle uncramped"><span class="sqrt mord"><span class="sqrt-sign" style="top:0.03971999999999998em;"><span class="style-wrap reset-textstyle textstyle uncramped">√</span></span><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">n</span></span></span><span style="top:-0.72028em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped sqrt-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span>​</span></span></span></span></span></span>​⌉</p>
+</blockquote>
+<p>且:</p>
+<blockquote>
+<p>b^2=a^2−n</p>
+</blockquote>
+<p>如果：</p>
+<blockquote>
+<p>b^2=k^2</p>
+</blockquote>
+<p>则：</p>
+<blockquote>
+<p>b=k</p>
+</blockquote>
+<p>并得到：</p>
+<blockquote>
+<p>p=a−b,q=a+b</p>
+</blockquote>
+<p>完成分解。</p>
+<p>如果b^2不是完全平方数：</p>
+<blockquote>
+<p>a←a+1</p>
+</blockquote>
+<p>回到 Step 2循环</p>
+<p><strong>通常很快就能得到结果…</strong></p>
+<p>可以自行搜索资料…☺️</p>
+<p>代码实现:</p>
+<pre><code class="language-python">exploit.py
+import gmpy2
+
+def fermat(n):
+    a = gmpy2.isqrt(n)
+    if a * a &lt; n:
+        a += 1
+
+    while True:
+        b2 = a * a - n
+        b = gmpy2.isqrt(b2)
+        if b * b == b2:
+            return a - b, a + b
+        a += 1
+</code></pre>
+<p><em>that is end</em>☺️</p>
+<p>感谢阅读!☺️</p>
+</div>
+</div>
+</body>
+</html>
