@@ -1,5 +1,5 @@
 ---
-title: "introduction"
+title: "the beginning of your ctf journey"
 excerpt: "简单介绍一下ctf"
 date: "2025-12-09"
 -slug: "hello world!"
@@ -21,7 +21,7 @@ section: "introduction"
 
 小时候曾经在 *亲爱的热爱的* 这部电视剧上看到过 ctf 这门比赛，  
 没想到如今长大后竟能有所接触，  
-**缘分果真妙不可言。**
+**缘分果真妙不可言。**😅
 
 当然，你可能要问：
 
@@ -29,9 +29,9 @@ section: "introduction"
 
 ---
 
-## 🧠 <span style="color:#6bc5ff">我为什么选择 CTF</span>
+## 🧠 <span style="color:#6bc5ff">为什么选择 CTF</span>
 
-我认为安全这门学科是**非常需要实践**而非仅仅停留在理论层面的，  
+安全这门学科是**非常需要实践**而非仅仅停留在理论层面的，  
 而 CTF 这样的比赛恰好为你搭建了一个：
 
 > ✅ **合法**  
@@ -220,6 +220,6 @@ ps：纯属无聊...
 
 ---
 
-> **roxy 正在创作中 🚀**  
+> **roxy 也许正在创作中 🚀**  
 > *(大概率先睡一会儿...😴😴😴)*
 </div>
