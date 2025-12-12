@@ -9,7 +9,7 @@ section: "introduction"
 
 <div class="intro-article">
 
-# 🎮 <span style="color:#ffcc00">CTF 到底是什么???</span>
+#  <span style="color:#ffcc00">CTF 到底是什么???</span>
 
 如果你第一次听到 **CTF（Capture The Flag）**，  
 放心，you are not alone 😄  
@@ -63,7 +63,7 @@ section: "introduction"
 
 ---
 
-## 🧨 <span style="color:#ff6b6b">PWN —— 二进制漏洞利用</span>  
+##  <span style="color:#ff6b6b">PWN —— 二进制漏洞利用</span>  
 *(my favourite,夹带私货😏😏😏)*
 
 > **享受控制程序执行流的乐趣，来自最底层的绝对掌控!**
@@ -92,7 +92,7 @@ section: "introduction"
 
 ---
 
-## 🌐 <span style="color:#4dabf7">Web —— 世界上 Bug 最多的地方</span>
+##  <span style="color:#4dabf7">Web —— 世界上 Bug 最多的地方</span>
 
 > **我只是写个登录，怎么就被打穿了？？？**
 
@@ -121,10 +121,10 @@ but：
 
 ---
 
-## 🔍 <span style="color:#51cf66">Reverse —— 逆向工程</span>  
+##  <span style="color:#51cf66">Reverse —— 逆向工程</span>  
 *(含金量😎😎😎，大佬云集)*
 
-### 🔑 关键词：
+###  关键词：
 
 - 反汇编
 - IDA / Ghidra
@@ -160,12 +160,12 @@ ps:
 Crypto 很少让你实现算法，  
 **更多是让你去「拆穿」算法。**
 
-> ✅ 如果你喜欢 **数学 / 数学 / 数学**  
-> ✅ Crypto 非常纯粹，也非常优雅
+>  如果你喜欢 **数学 / 数学 / 数学**  
+>  Crypto 非常纯粹，也非常优雅
 
 ---
 
-## 🧩 <span style="color:#ffa94d">Misc —— 万物皆可 Misc</span>
+##  <span style="color:#ffa94d">Misc —— 万物皆可 Misc</span>
 
 > **Misc = 题目作者想不进分类的都在这**
 
