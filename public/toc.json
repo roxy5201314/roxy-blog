@@ -18,6 +18,15 @@
     "items": [
       {
         "section": "pwn",
+        "slug": "pwndbg",
+        "title": "pwndbg调试指南",
+        "excerpt": "因为所有题目几乎都不可能一次就打通，所以你需要学会如何调试并找到问题",
+        "date": "2025-12-13",
+        "id": "pwn-pwndbg",
+        "path": "/articles/pwn-pwndbg.html"
+      },
+      {
+        "section": "pwn",
         "slug": "protection",
         "title": "现代保护机制",
         "excerpt": "魔高一尺，道高一丈，攻防也是如此，有攻亦有防",
