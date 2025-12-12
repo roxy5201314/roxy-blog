@@ -47,7 +47,17 @@
   },
   {
     "id": "web",
-    "items": []
+    "items": [
+      {
+        "section": "web",
+        "slug": "sqli",
+        "title": "什么是SQL注入?",
+        "excerpt": "根据dvwa靶场的4道题目简单介绍一下sqli技术",
+        "date": "2025-12-12",
+        "id": "web-sqli",
+        "path": "/articles/web-sqli.html"
+      }
+    ]
   },
   {
     "id": "reverse",

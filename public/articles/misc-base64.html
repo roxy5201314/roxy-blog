@@ -15,7 +15,7 @@
 <p><strong>Base64 不是加密，它只是编码。</strong></p>
 </blockquote>
 <p>它的作用非常朴素：<br>
-👉 <strong>把任意二进制数据，用“可打印字符”表示出来。</strong></p>
+<strong>把任意二进制数据，用“可打印字符”表示出来。</strong></p>
 <hr>
 <h2>为什么需要 Base64？</h2>
 <p>计算机中的数据本质是 <strong>二进制 0 / 1</strong>，<br>
@@ -69,7 +69,7 @@ n -&gt; 01101110</p>
 <p>19 22 5 46</p>
 <p>查 Base64 表：</p>
 <p>T W F u</p>
-<p>✅ 结果：</p>
+<p>结果：</p>
 <p>Man → TWFu</p>
 <hr>
 <h2>为什么会有 <code>=</code> 填充符？</h2>
@@ -87,7 +87,7 @@ n -&gt; 01101110</p>
 M → TQ==</p>
 <hr>
 <h2>在 CTF 中 Base64 的常见出现形式</h2>
-<h3>✅ 1️⃣ 最简单：一眼 Base64</h3>
+<h3>1️.最简单：一眼 Base64</h3>
 <p>特征非常明显：</p>
 <ul>
 <li>只包含 <code>A–Z a–z 0–9 + / =</code></li>
@@ -95,10 +95,10 @@ M → TQ==</p>
 </ul>
 <p>例如：</p>
 <p>ZmxhZ3tqdXN0X2RlY29kZX0=</p>
-<p>👉 解码一下：</p>
+<p>解码一下：</p>
 <p>flag{just_decode}😎😎😎</p>
 <hr>
-<h3>✅ 2️⃣ 套娃型 Base64</h3>
+<h3>2.套娃型 Base64</h3>
 <p>CTF 里非常常见：</p>
 <p>Base64 → Base64 → Base64 → 明文
 甚至会出现：</p>
@@ -110,36 +110,45 @@ M → TQ==</p>
 <p>你需要自己根据已知的flag形式去深入分析可能存在的变化</p>
 <p>所以理解原理是十分必要的</p>
 <p>要善于利用AI，但不能完全依赖AI而丧失自主的思考</p>
-<p>✅ 3️⃣ 和其他编码一起出现
-例如：</p>
+<h3>3️.和其他编码一起出现</h3>
+<p>例如：</p>
 <p>Base64 + URL 编码</p>
 <p>Base64 + XOR(异或)</p>
 <p>Base大家族(91,58,85,100)😷</p>
-<p>看到 Base64 不要以为结束了，
-它往往只是“外壳”。</p>
+<p>看到 Base64 不要以为结束了，</p>
+<p>它往往只是“外壳”。</p>
 <p>常用工具</p>
 <p>LINUX命令行</p>
 <p>echo “TWFu” | base64 -d</p>
 <p>Python（CTF 最常用）</p>
-<p>import base64</p>
-<p>s = “TWFu”
-print(base64.b64decode(s).decode())</p>
+<pre><code class="language-python">import base64
+
+s = &quot;TWFu&quot;
+
+print(base64.b64decode(s).decode())
+</code></pre>
 <p>CyberChef（强烈推荐）😎</p>
 <p>自动识别</p>
 <p>可链式操作</p>
 <p>非常适合套娃编码</p>
-<p><strong>一个 CTF 重要提醒</strong> ⚠️
-Base64 ≠ 密码学安全</p>
+<p><strong>一个 CTF 重要提醒</strong> 😷</p>
+<blockquote>
+<p>Base64 ≠ 密码学安全</p>
+</blockquote>
 <p>任何能看到密文的人：</p>
 <p>都可以直接解码</p>
 <p>不需要密钥</p>
 <p>不需要破解</p>
 <p>所以在 CTF 中它更多是：</p>
-<p>✅ 迷惑
-✅ 外壳
-✅ 编码链的一环</p>
-<p>小结 ✅
-Base64 不是加密，只是编码</p>
+<ul>
+<li>迷惑</li>
+<li>外壳</li>
+<li>编码链的一环</li>
+</ul>
+<p>小结 😎</p>
+<blockquote>
+<p>Base64 不是加密，只是编码</p>
+</blockquote>
 <p>作用是把二进制变成可打印字符</p>
 <p>CTF 中极常见，经常是第一步!</p>
 <p>over~ 😎</p>

