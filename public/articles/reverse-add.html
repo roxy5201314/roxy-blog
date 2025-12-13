@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>逆向工程到底在干嘛</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="reverse-add">
+<div class="intro-article">
+<h1><span style="color:green">欢迎来到逆向的第一篇文章</span></h1>
+<p>ps:由于我也不是很会逆向,我也只是边学边写,谈谈自己的想法(不喜勿喷)😋</p>
+<p>在很多人的印象中，<strong>逆向工程</strong>就是：</p>
+<ul>
+<li>打开 IDA</li>
+<li>把文件扔进去</li>
+<li>找 flag</li>
+</ul>
+<p>但在我真正开始接触逆向之后，我发现这完全不是本质。</p>
+<p>让我们从一个更朴素的问题开始看看：</p>
+<blockquote>
+<p>CPU 到底是如何一步一步执行这个程序的？</p>
+</blockquote>
+<p>为了说明这一点，我们从一个几乎不能再简单的程序开始。🤭</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int x = 3;
+    int y = 4;
+    int z = add(x, y);
+    printf(&quot;%d\n&quot;, z);
+    return 0;
+}
+</code></pre>
+<p>让我们从汇编视角看看这样一个简单的函数调用小程序到底干了哪些事情</p>
+<h2>函数的入口</h2>
+<pre><code class="language-asm">push rbp
+mov rbp, rsp
+sub rsp, 0x20
+</code></pre>
+<p>这三条指令意味着一件事:</p>
+<p>一个函数开始了</p>
+<p>当前函数正在建立自己的栈帧</p>
+<p>在逆向中,只要看到这些,你就可以确定:这是一个函数的入口。</p>
+<h2>局部变量是怎么出现的？</h2>
+<p>源码中有：</p>
+<pre><code class="language-c">int x = 3;
+int y = 4;
+</code></pre>
+<p>在汇编里，它们通常表现为：</p>
+<pre><code class="language-asm">mov DWORD PTR [rbp-0x4], 0x3
+mov DWORD PTR [rbp-0x8], 0x4
+</code></pre>
+<p>rbp 是当前函数<strong>栈帧</strong>的基址</p>
+<p>rbp-0x4、rbp-0x8 是局部变量</p>
+<p>常量 3、4 被直接写进栈内存</p>
+<p>因此</p>
+<blockquote>
+<p>局部变量 ≈ 栈上的一块内存</p>
+</blockquote>
+<p>逆向不是猜测变量名是什么</p>
+<p>而是判断：</p>
+<blockquote>
+<p>这块内存什么时候被写?什么时候被读?</p>
+</blockquote>
+<h2>函数调用与传参</h2>
+<pre><code class="language-c">z = add(x, y);
+</code></pre>
+<p>在 x86-64 Linux 下，常见的汇编形式是:</p>
+<pre><code class="language-asm">mov eax, DWORD PTR [rbp-0x4]
+mov edi, eax
+mov eax, DWORD PTR [rbp-0x8]
+mov esi, eax
+call add
+</code></pre>
+<p>关键:</p>
+<p>参数被送进<strong>寄存器</strong></p>
+<p>call 指令跳转到函数</p>
+<p>返回值会放在 eax / rax</p>
+<h2>函数中发生了什么?</h2>
+<p>add 函数的核心汇编通常非常短：</p>
+<pre><code class="language-asm">push rbp
+mov rbp, rsp
+mov eax, edi
+add eax, esi
+pop rbp
+ret
+</code></pre>
+<p>edi放着第一个参数 a</p>
+<p>esi放着第二个参数 b</p>
+<p>而eax是返回值寄存器</p>
+<p>这条指令：</p>
+<p>add eax, esi</p>
+<p>就对应着源码里的：</p>
+<p>return a + b;</p>
+<p>到这里你应该意识到一件事：</p>
+<p>C 语言的 return，本质上只是把值放进 eax!</p>
+<h2><span style="color:blue">pwn与逆向的联系</span></h2>
+<pre><code class="language-asm">call add
+...
+ret
+</code></pre>
+<p>call 会：</p>
+<p>把返回地址压栈</p>
+<p>跳转到目标函数</p>
+<p>ret 会：</p>
+<p>从栈中取出返回地址</p>
+<p>跳回调用点</p>
+<p>因此</p>
+<p>覆盖返回地址 = 控制程序执行流</p>
+<p>栈溢出能 hijack 控制流</p>
+<blockquote>
+<p>pwn 和逆向,在这里,产生了交集!</p>
+</blockquote>
+<h2>printf从何而来?</h2>
+<pre><code class="language-asm">call printf@plt
+</code></pre>
+<p>printf 不在当前程序里</p>
+<p>它来自 libc 动态链接库</p>
+<p>这里只是通过 PLT 进行一次跳转</p>
+<p>逆向中看到 xxx@plt，你应该立刻反应：</p>
+<blockquote>
+<p>这是外部函数调用，不是程序逻辑本身!</p>
+</blockquote>
+<h2><strong>总结</strong></h2>
+<p>逆向不是从做题开始的，</p>
+<p>而是从能完整看懂执行流开始的。</p>
+<p>当你能用汇编解释：</p>
+<p>一个函数怎么被调用</p>
+<p>参数从哪里来</p>
+<p>返回值往哪里走</p>
+<blockquote>
+<p>那你已经迈进逆向的大门了!</p>
+</blockquote>
+<p>that is end~😎</p>
+<p>感谢阅读~😎</p>
+</div>
+</div>
+</body>
+</html>

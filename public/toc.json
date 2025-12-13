@@ -70,7 +70,17 @@
   },
   {
     "id": "reverse",
-    "items": []
+    "items": [
+      {
+        "section": "reverse",
+        "slug": "add",
+        "title": "逆向工程到底在干嘛",
+        "excerpt": "从汇编层面逆向看看最简单的程序是个什么逻辑",
+        "date": "2025-12-13",
+        "id": "reverse-add",
+        "path": "/articles/reverse-add.html"
+      }
+    ]
   },
   {
     "id": "crypto",
