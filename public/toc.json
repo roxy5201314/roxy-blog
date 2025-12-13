@@ -59,6 +59,15 @@
     "items": [
       {
         "section": "web",
+        "slug": "php-type-vulnerability-ctf",
+        "title": "php漏洞",
+        "excerpt": "从一道题看看php安全陷阱与利用技巧",
+        "date": "2025-12-13",
+        "id": "web-php-type-vulnerability-ctf",
+        "path": "/articles/web-php-type-vulnerability-ctf.html"
+      },
+      {
+        "section": "web",
         "slug": "sqli",
         "title": "什么是SQL注入?",
         "excerpt": "根据dvwa靶场的4道题目简单介绍一下sqli技术",
