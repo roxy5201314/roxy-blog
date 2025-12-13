@@ -13,7 +13,7 @@
 <p><strong>LCG (Linear Congruential Generator，线性同余生成器)</strong>。</p>
 <p>核心逻辑：基于一个简单的线性递推公式来生成伪随机序列，但参数已知时可预测！😀</p>
 <hr>
-<h2>第一步：理解递推公式</h2>
+<h2>理解递推公式</h2>
 <p>LCG的核心由一个线性同余方程定义：</p>
 <blockquote>
 <p><strong>Xₙ₊₁ ≡ (a · Xₙ + c) (mod m)</strong></p>
@@ -35,7 +35,7 @@
 </ul>
 <p>整个生成器的安全性(或不可预测性)完全依赖于参数 <strong>(a, c, m)</strong> 和初始种子 <strong><code>X₀</code></strong> 的保密性!</p>
 <hr>
-<h2>第二步：典型参数与性质</h2>
+<h2>典型参数与性质</h2>
 <p>LCG生成的随机数序列具有周期性。为了获得一个长周期（理想情况下达到 <strong><code>m</code></strong>），参数需要精心选择：</p>
 <ul>
 <li><strong><code>c</code></strong> 和 <strong><code>m</code></strong> 互质。</li>
@@ -48,7 +48,7 @@
 </blockquote>
 <p>由于其参数完全公开，只要知道连续几个输出值，就能轻易破解整个序列。</p>
 <hr>
-<h2>第三步：攻击与破解</h2>
+<h2>攻击与破解</h2>
 <p>在CTF密码学题中，LCG的破解通常分为以下几种情况，核心是求解未知参数：</p>
 <h3>情况1：已知<code>a, c, m</code>，求种子<code>X₀</code></h3>
 <p>如果参数已知，你只需要一个输出值 <code>X1</code>，就可以通过逆推得到种子：</p>
@@ -68,20 +68,20 @@
 <li>计算 <code>c</code>:</li>
 </ol>
 <blockquote>
-<p><strong>c ≡ (X_1 - a * X_0) mod m</strong></p>
+<p><strong>c ≡ (X1 - a * X0) mod m</strong></p>
 </blockquote>
 <h3>情况3：连<code>m</code>也未知</h3>
 <p>需要更多的连续输出值（例如6个），利用数列差值构成的序列，其最大公约数很可能就是 <code>m</code>，然后再套用情况2的方法。</p>
 <hr>
-<h2>第四步：LCG的优缺点</h2>
+<h2>LCG的优缺点</h2>
 <h3>优点</h3>
 <p><strong>实现极其简单</strong>，计算速度快，占用内存小。</p>
 <p>在不需要高安全性的场合（如模拟、游戏）仍有使用。</p>
-<h3>缺点（也是密码学上的致命弱点）</h3>
+<h3>缺点（也是密码学上的致命弱点!）</h3>
 <ul>
 <li><strong>可预测性</strong>：正如破解方法所示，序列并非真正随机。</li>
 <li><strong>序列相关性</strong>：低位比特的随机性周期更短（例如，最低位可能只是0和1交替）。</li>
-<li><strong>高维分布不均匀</strong>：如果将连续生成的几个数作为高维空间中的点，这些点会落在少数几个超平面上（Marsaglia定理）。</li>
+<li><strong>高维分布不均匀</strong>：如果将连续生成的几个数作为高维空间中的点，这些点会落在少数几个超平面上(Marsaglia定理)?</li>
 </ul>
 <p>因此，<strong>LCG绝不能用于任何需要密码学安全随机数的场景</strong>，如生成密钥。</p>
 <hr>
@@ -103,9 +103,11 @@
         self.state = (self.a * self.state + self.c) % self.m
         return self.state
 </code></pre>
+<blockquote>
 <p>记住，看到连续的、模某个大数的随机数，先想想是不是LCG！</p>
-<p>over~</p>
-<p>感谢阅读!</p>
+</blockquote>
+<p>over~🤠</p>
+<p>感谢阅读!🤠</p>
 </div>
 </div>
 </body>
