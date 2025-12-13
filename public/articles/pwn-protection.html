@@ -19,7 +19,76 @@
 </blockquote>
 <p>为了方便演示，这条语句实际上关闭了许多程序保护措施</p>
 <p>现在就让我们一个一个来看看为了防护二进制漏洞</p>
-<p><span style="color:#845ef7">现代防御系统都存在着哪些机制</span></p>
+<h1><span style="color:#845ef7">现代防御系统都存在着哪些机制</span></h1>
+<h2>1.-fno-stack-protector</h2>
+<blockquote>
+<p>关闭栈保护(<strong>Canary</strong>)</p>
+</blockquote>
+<p>历史来源:</p>
+<p>Canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。</p>
+<p>工人们每次下井都会带上一只金丝雀。</p>
+<p>如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。</p>
+<p>在正常编译下</p>
+<p>默认情况下，gcc会在函数栈帧中插入一个随机值(Canary)：</p>
+<p>| buf[32] |
+| Canary  |  ← 你一旦覆盖它
+| saved rbp |
+| ret addr |</p>
+<p>函数返回前会检查：</p>
+<p>if (canary != original_canary)</p>
+<pre><code>__stack_chk_fail();
+</code></pre>
+<p>如果你溢出了？</p>
+<p>程序会直接：</p>
+<p>*** stack smashing detected! ***</p>
+<p>Aborted (core dumped)</p>
+<p>而这个参数完全关闭了栈Canary</p>
+<p>因此实际的溢出并没有那么简单</p>
+<p>你可能需要先</p>
+<p><strong>泄露Canary</strong>(格式化字符串漏洞,逻辑泄露)</p>
+<p>或绕过Canary(SROP/partial overwrite/logic bug…)</p>
+<h2>2.-z execstack</h2>
+<blockquote>
+<p>栈可执行(关闭NX(non executable,windows中叫DEP))</p>
+</blockquote>
+<p>如果NX开启,你在栈上放shellcode,然后跳过去：</p>
+<p>Segmentation fault(段错误!)</p>
+<p>这个参数使得栈是可执行的</p>
+<p>这意味着shellcode可以直接写在栈上</p>
+<p>极大地简化了利用流程</p>
+<p>大多数情况NX都是开启的</p>
+<p>这时候便需要</p>
+<p>ROP技术(return oriented programming)</p>
+<p>后续再展开吧…😂</p>
+<h2>3.-no-pie</h2>
+<blockquote>
+<p>关闭PIE(地址随机化)</p>
+</blockquote>
+<p>PIE(Position Independent Executable)配合ASLR：</p>
+<p>程序基址每次运行都不同</p>
+<p>函数地址、gadgets地址全变</p>
+<p>这个参数关闭了PIE,使得程序地址固定</p>
+<p>依旧极大地简化了攻击流程</p>
+<p>破解思路:</p>
+<ul>
+<li>
+<p>泄露程序基址(ret2libc)</p>
+</li>
+<li>
+<p>利用GOT/PLT</p>
+</li>
+<li>
+<p>利用已知偏移…</p>
+</li>
+</ul>
+<p>这些保护默认本是默认开启的</p>
+<p>而我们这条命令相当于刻意把程序“退化”到十几年前的安全水平😂😂</p>
+<p>因此pwn之路任重而道远啊…</p>
+<blockquote>
+<p>ps:利用checksec可以清楚地看到开启or关闭了哪些保护</p>
+</blockquote>
+<p>that is end~🥰</p>
+<p>感谢阅读!🥰</p>
 </div>
 </div>
 </body>
