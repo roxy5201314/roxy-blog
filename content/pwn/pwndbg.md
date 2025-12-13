@@ -18,7 +18,7 @@ ps:因为是我很久之前抄在word中的技术文章,所以可能排版有点
 
 <span style="color:orange">i</span>：info，查看信息（输入 info 可查看所有子命令）
 
-<span style="color:yellow">i b</span>：查看所有断点信息（编号、地址）
+<span style="color:purple">i b</span>：查看所有断点信息（编号、地址）
 
 <span style="color:green">i r</span>：查看寄存器
 
@@ -32,7 +32,7 @@ ps:因为是我很久之前抄在word中的技术文章,所以可能排版有点
 
 <span style="color:orange">backtrace</span>：查看调用栈
 
-<span style="color:yellow">q</span>：退出 gdb
+<span style="color:cyan">q</span>：退出 gdb
 
 <span style="color:green">vmmap</span>：查看内存布局
 
@@ -48,7 +48,7 @@ ps:因为是我很久之前抄在word中的技术文章,所以可能排版有点
 
 <span style="color:orange">c</span>：继续执行直到断点
 
-<span style="color:yellow">r</span>：重新运行
+<span style="color:blue">r</span>：重新运行
 
 <span style="color:green">start</span>：运行到 main 起始处
 
@@ -66,7 +66,7 @@ ps:因为是我很久之前抄在word中的技术文章,所以可能排版有点
 
 <span style="color:orange">b +0x10</span>：当前停住位置偏移下断点
 
-<span style="color:yellow">break fun if $rdi==5</span>：条件断点
+<span style="color:blue">break fun if $rdi==5</span>：条件断点
 
 > 删除、禁用断点
 
@@ -84,7 +84,7 @@ ps:因为是我很久之前抄在word中的技术文章,所以可能排版有点
 
 <span style="color:orange">watch 0x123456</span>：该地址值改变时断
 
-<span style="color:yellow">watch a</span>：变量改变时断
+<span style="color:purple">watch a</span>：变量改变时断
 
 <span style="color:green">info watchpoints</span>：查看 watch 列表
 
@@ -118,7 +118,7 @@ f：显示格式（x/u/d/t/a/c/f/s/i）
 
 > 打印指令（p）
 
-<span style="color:yellow">p fun_name</span>：打印函数地址
+<span style="color:blue">p fun_name</span>：打印函数地址
 
 <span style="color:green">p 0x10-0x08</span>：计算表达式
 
@@ -134,7 +134,7 @@ f：显示格式（x/u/d/t/a/c/f/s/i）
 
 <span style="color:orange">set *(0x123456)=0x10</span>：改内存
 
-<span style="color:yellow">search rdi</span>：查指令
+<span style="color:blue">search rdi</span>：查指令
 
 <span style="color:green">find "hello"</span>：找字符串（pwndbg 特有）
 
@@ -150,7 +150,7 @@ f：显示格式（x/u/d/t/a/c/f/s/i）
 
 <span style="color:orange">fastbins</span>
 
-<span style="color:yellow">largebins</span>
+<span style="color:cyan">largebins</span>
 
 <span style="color:green">smallbins</span>
 
@@ -164,7 +164,7 @@ f：显示格式（x/u/d/t/a/c/f/s/i）
 
 <span style="color:orange">heapbase</span>：堆基址
 
-<span style="color:yellow">parseheap</span>：更清晰的堆结构
+<span style="color:red">parseheap</span>：更清晰的堆结构
 
 <span style="color:green">tracemalloc</span>：跟踪堆操作
 
@@ -180,7 +180,7 @@ f：显示格式（x/u/d/t/a/c/f/s/i）
 
 <span style="color:orange">retaddr</span>：定位返回地址
 
-<span style="color:yellow">canary</span>：直接看 canary(仅本地有用,而且每次都会变😅)
+<span style="color:blue">canary</span>：直接看 canary(仅本地有用,而且每次都会变😅)
 
 <span style="color:green">plt</span>：查看 PLT
 

@@ -16,14 +16,14 @@
 </blockquote>
 <p><span style="color:red">help</span>：帮助命令</p>
 <p><span style="color:orange">i</span>：info，查看信息（输入 info 可查看所有子命令）</p>
-<p><span style="color:yellow">i b</span>：查看所有断点信息（编号、地址）</p>
+<p><span style="color:purple">i b</span>：查看所有断点信息（编号、地址）</p>
 <p><span style="color:green">i r</span>：查看寄存器</p>
 <p><span style="color:cyan">i f</span>：查看函数名（需保留符号）</p>
 <p><span style="color:blue">show</span>：查看调试器自身信息</p>
 <p><span style="color:purple">show args</span>：查看程序参数</p>
 <p><span style="color:red">rdi</span>：直接打印寄存器值（如 $rdi）</p>
 <p><span style="color:orange">backtrace</span>：查看调用栈</p>
-<p><span style="color:yellow">q</span>：退出 gdb</p>
+<p><span style="color:cyan">q</span>：退出 gdb</p>
 <p><span style="color:green">vmmap</span>：查看内存布局</p>
 <blockquote>
 <p>执行指令(好理解,但很关键,最好动手看看😊)</p>
@@ -33,7 +33,7 @@
 <p><span style="color:purple">n</span>：源码层面的步过（step over）</p>
 <p><span style="color:red">ni</span>：汇编层面的步过</p>
 <p><span style="color:orange">c</span>：继续执行直到断点</p>
-<p><span style="color:yellow">r</span>：重新运行</p>
+<p><span style="color:blue">r</span>：重新运行</p>
 <p><span style="color:green">start</span>：运行到 main 起始处</p>
 <blockquote>
 <p>断点操作(重要!)</p>
@@ -46,7 +46,7 @@
 <p><span style="color:purple">b fun_name</span>：给函数下断点</p>
 <p><span style="color:red">b file.c:15</span>：给某源码行下断点</p>
 <p><span style="color:orange">b +0x10</span>：当前停住位置偏移下断点</p>
-<p><span style="color:yellow">break fun if $rdi==5</span>：条件断点</p>
+<p><span style="color:blue">break fun if $rdi==5</span>：条件断点</p>
 <blockquote>
 <p>删除、禁用断点</p>
 </blockquote>
@@ -59,7 +59,7 @@
 <p>内存断点（watch）</p>
 </blockquote>
 <p><span style="color:orange">watch 0x123456</span>：该地址值改变时断</p>
-<p><span style="color:yellow">watch a</span>：变量改变时断</p>
+<p><span style="color:purple">watch a</span>：变量改变时断</p>
 <p><span style="color:green">info watchpoints</span>：查看 watch 列表</p>
 <blockquote>
 <p>捕获断点（catch）</p>
@@ -84,7 +84,7 @@
 <blockquote>
 <p>打印指令（p）</p>
 </blockquote>
-<p><span style="color:yellow">p fun_name</span>：打印函数地址</p>
+<p><span style="color:blue">p fun_name</span>：打印函数地址</p>
 <p><span style="color:green">p 0x10-0x08</span>：计算表达式</p>
 <p><span style="color:cyan">p &amp;a</span>：查看变量地址</p>
 <p><span style="color:blue">p *(0x123456)</span>：查看地址值</p>
@@ -94,7 +94,7 @@
 </blockquote>
 <p><span style="color:red">set $rdi=0x10</span>：改寄存器</p>
 <p><span style="color:orange">set *(0x123456)=0x10</span>：改内存</p>
-<p><span style="color:yellow">search rdi</span>：查指令</p>
+<p><span style="color:blue">search rdi</span>：查指令</p>
 <p><span style="color:green">find “hello”</span>：找字符串（pwndbg 特有）</p>
 <blockquote>
 <p>堆调试（pwndbg 独有）我也不会，先忽略😁😁</p>
@@ -104,14 +104,14 @@
 <p><span style="color:purple">arenainfo</span>：更美观显示</p>
 <p><span style="color:red">bins</span>：最常用，查看所有 bins</p>
 <p><span style="color:orange">fastbins</span></p>
-<p><span style="color:yellow">largebins</span></p>
+<p><span style="color:cyan">largebins</span></p>
 <p><span style="color:green">smallbins</span></p>
 <p><span style="color:cyan">unsortedbin</span></p>
 <p><span style="color:blue">tcache</span></p>
 <p><span style="color:purple">tcachebins</span></p>
 <p><span style="color:red">heap</span>：显示所有堆块</p>
 <p><span style="color:orange">heapbase</span>：堆基址</p>
-<p><span style="color:yellow">parseheap</span>：更清晰的堆结构</p>
+<p><span style="color:red">parseheap</span>：更清晰的堆结构</p>
 <p><span style="color:green">tracemalloc</span>：跟踪堆操作</p>
 <blockquote>
 <p>其他 pwndbg 常用指令</p>
@@ -121,7 +121,7 @@
 <p><span style="color:purple">codebase</span>：打印 PIE 偏移(本地😅)</p>
 <p><span style="color:red">stack</span>：查看栈</p>
 <p><span style="color:orange">retaddr</span>：定位返回地址</p>
-<p><span style="color:yellow">canary</span>：直接看 canary(仅本地有用,而且每次都会变😅)</p>
+<p><span style="color:blue">canary</span>：直接看 canary(仅本地有用,而且每次都会变😅)</p>
 <p><span style="color:green">plt</span>：查看 PLT</p>
 <p><span style="color:cyan">got</span>：查看 GOT</p>
 <p><span style="color:blue">hexdump</span>：ida 风格 hex 显示</p>
