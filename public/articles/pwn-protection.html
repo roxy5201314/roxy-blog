@@ -28,12 +28,12 @@
 <p>Canary的意思是金丝雀，来源于英国矿井工人用来探查井下气体是否有毒的金丝雀笼子。</p>
 <p>工人们每次下井都会带上一只金丝雀。</p>
 <p>如果井下的气体有毒，金丝雀由于对毒性敏感就会停止鸣叫甚至死亡，从而使工人们得到预警。</p>
-<p>在正常编译下</p>
+<p>在正常编译时</p>
 <p>默认情况下，gcc会在函数栈帧中插入一个随机值(Canary)：</p>
-<p>| buf[32] |
-| Canary  |  ← 你一旦覆盖它
-| saved rbp |
-| ret addr |</p>
+<p>| buf[32] |</p>
+<p>| Canary  |  ← 你一旦覆盖它</p>
+<p>| saved rbp |</p>
+<p>| ret addr |</p>
 <p>函数返回前会检查：</p>
 <p>if (canary != original_canary)</p>
 <pre><code>__stack_chk_fail();
