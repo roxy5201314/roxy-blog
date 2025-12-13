@@ -59,12 +59,12 @@
     "items": [
       {
         "section": "web",
-        "slug": "php-type-vulnerability-ctf",
+        "slug": "php-vulnerability",
         "title": "php漏洞",
-        "excerpt": "从一道题看看php安全陷阱与利用技巧",
+        "excerpt": "从一道题看看php的一些安全漏洞与利用技巧",
         "date": "2025-12-13",
-        "id": "web-php-type-vulnerability-ctf",
-        "path": "/articles/web-php-type-vulnerability-ctf.html"
+        "id": "web-php-vulnerability",
+        "path": "/articles/web-php-vulnerability.html"
       },
       {
         "section": "web",
