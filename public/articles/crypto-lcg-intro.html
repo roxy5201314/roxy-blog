@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What is LCG?</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+<body>
+<div class="article-content" data-id="crypto-lcg-intro">
+<div class="intro-article">
+<p>简单介绍一下一个在密码学和随机数生成中常见的算法</p>
+<p><strong>LCG (Linear Congruential Generator，线性同余生成器)</strong>。</p>
+<p>核心逻辑：基于一个简单的线性递推公式来生成伪随机序列，但参数已知时可预测！😀</p>
+<hr>
+<h2>第一步：理解递推公式</h2>
+<p>LCG的核心由一个线性同余方程定义：</p>
+<blockquote>
+<p><strong>Xₙ₊₁ ≡ (a · Xₙ + c) (mod m)</strong></p>
+</blockquote>
+<p>其中：</p>
+<ul>
+<li>
+<p><strong><code>Xₙ</code></strong>: 当前状态(种子或上一个随机数)。</p>
+</li>
+<li>
+<p><strong><code>a</code></strong>: 乘数 (Multiplier)。</p>
+</li>
+<li>
+<p><strong><code>c</code></strong>: 增量 (Increment)。</p>
+</li>
+<li>
+<p><strong><code>m</code></strong>: 模数 (Modulus)，通常是一个很大的整数，决定了序列的范围（<code>0</code> 到 <code>m-1</code>）。</p>
+</li>
+</ul>
+<p>整个生成器的安全性(或不可预测性)完全依赖于参数 <strong>(a, c, m)</strong> 和初始种子 <strong><code>X₀</code></strong> 的保密性!</p>
+<hr>
+<h2>第二步：典型参数与性质</h2>
+<p>LCG生成的随机数序列具有周期性。为了获得一个长周期（理想情况下达到 <strong><code>m</code></strong>），参数需要精心选择：</p>
+<ul>
+<li><strong><code>c</code></strong> 和 <strong><code>m</code></strong> 互质。</li>
+<li><strong><code>a - 1</code></strong> 可以被 <code>m</code> 的所有质因数整除。</li>
+<li>如果 <code>m</code> 是4的倍数，那么 <strong><code>a - 1</code></strong> 也必须是4的倍数。</li>
+</ul>
+<p>一个历史上著名且脆弱的例子是 <strong>glibc的<code>rand()</code></strong> (某些版本)：</p>
+<blockquote>
+<p><strong>a = 1103515245, c = 12345, m = 2^31</strong></p>
+</blockquote>
+<p>由于其参数完全公开，只要知道连续几个输出值，就能轻易破解整个序列。</p>
+<hr>
+<h2>第三步：攻击与破解</h2>
+<p>在CTF密码学题中，LCG的破解通常分为以下几种情况，核心是求解未知参数：</p>
+<h3>情况1：已知<code>a, c, m</code>，求种子<code>X₀</code></h3>
+<p>如果参数已知，你只需要一个输出值 <code>X1</code>，就可以通过逆推得到种子：</p>
+<blockquote>
+<p><strong>X0 ≡ a⁻¹ * (X1 - c) mod m</strong></p>
+</blockquote>
+<p>其中 <code>a⁻¹</code> 是 <code>a</code> 在模 <code>m</code> 下的乘法逆元。</p>
+<h3>情况2：未知<code>a, c</code>，但已知<code>m</code>和连续输出</h3>
+<p>这是经典场景。已知连续四个输出 <code>X0, X1, X2, X3</code> 和模数 <code>m</code>，我们可以恢复 <code>a</code> 和 <code>c</code>：</p>
+<ol>
+<li>计算 <code>a</code>:</li>
+</ol>
+<blockquote>
+<p><strong>a ≡ (X2 - X1) * (X1 - X0)⁻¹ mod m</strong></p>
+</blockquote>
+<ol start="2">
+<li>计算 <code>c</code>:</li>
+</ol>
+<blockquote>
+<p><strong>c ≡ (X_1 - a * X_0) mod m</strong></p>
+</blockquote>
+<h3>情况3：连<code>m</code>也未知</h3>
+<p>需要更多的连续输出值（例如6个），利用数列差值构成的序列，其最大公约数很可能就是 <code>m</code>，然后再套用情况2的方法。</p>
+<hr>
+<h2>第四步：LCG的优缺点</h2>
+<h3>优点</h3>
+<p><strong>实现极其简单</strong>，计算速度快，占用内存小。</p>
+<p>在不需要高安全性的场合（如模拟、游戏）仍有使用。</p>
+<h3>缺点（也是密码学上的致命弱点）</h3>
+<ul>
+<li><strong>可预测性</strong>：正如破解方法所示，序列并非真正随机。</li>
+<li><strong>序列相关性</strong>：低位比特的随机性周期更短（例如，最低位可能只是0和1交替）。</li>
+<li><strong>高维分布不均匀</strong>：如果将连续生成的几个数作为高维空间中的点，这些点会落在少数几个超平面上（Marsaglia定理）。</li>
+</ul>
+<p>因此，<strong>LCG绝不能用于任何需要密码学安全随机数的场景</strong>，如生成密钥。</p>
+<hr>
+<h2>小结</h2>
+<ul>
+<li>LCG是一种简单高效的<strong>伪随机数生成器(PRNG)</strong>，但密码学上不安全。</li>
+<li>其核心是递推公式：<strong>Xₙ₊₁ ≡ (a · Xₙ + c) (mod m)</strong>。</li>
+<li>在CTF中，破解LCG的关键在于利用连续的输出值，通过解模运算方程来恢复未知参数 <code>(a, c, m, seed)</code>。</li>
+</ul>
+<p>一个简单的Python实现示例：</p>
+<pre><code class="language-python">class LCG:
+    def __init__(self, seed, a, c, m):
+        self.state = seed
+        self.a = a
+        self.c = c
+        self.m = m
+
+    def next(self):
+        self.state = (self.a * self.state + self.c) % self.m
+        return self.state
+</code></pre>
+<p>记住，看到连续的、模某个大数的随机数，先想想是不是LCG！</p>
+<p>over~</p>
+<p>感谢阅读!</p>
+</div>
+</div>
+</body>
+</html>

@@ -87,6 +87,15 @@
     "items": [
       {
         "section": "crypto",
+        "slug": "lcg-intro",
+        "title": "What is LCG?",
+        "excerpt": "线性同余生成器",
+        "date": "2025-12-13",
+        "id": "crypto-lcg-intro",
+        "path": "/articles/crypto-lcg-intro.html"
+      },
+      {
+        "section": "crypto",
         "slug": "rsa-example",
         "title": "来做一道RSA入门题吧!",
         "excerpt": "ezRSA",
