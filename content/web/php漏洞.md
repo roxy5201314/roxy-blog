@@ -8,6 +8,8 @@ section: "web"
 
 <div class="intro-article">
 
+# let us begin!😏
+
 源码:
 
 ```php
@@ -38,7 +40,11 @@ WP:
 
 考察：类型混淆 + 宽松比较(magic hash)
 
-> 1.isset($_POST['a']) && !preg_match('/[0-9]/', $_POST['a']) && intval($_POST> ['a']) 
+## **1**
+
+```php
+ isset($_POST['a']) && !preg_match('/[0-9]/', $_POST['a']) && intval($_POST> ['a']) 
+```
 
 用法误假设 $_POST['a'] 是字符串
 
@@ -50,17 +56,23 @@ intval(array) 在常见 PHP 版本下不会抛致命错误，结果为 1 / truth
 
 因此整行成立!
 
-> 2.isset($_POST['b1']) && $_POST['b2']
+## **2**
+
+```php
+isset($_POST['b1']) && $_POST['b2']
+```
 
 只检查 b1 是否设置且 $_POST['b2'] 为 truthy（没有 isset）
 
 提交 b1[]=hello 与 b2[]=hacker（不同数组）即可满足!
 
-> 3.$_POST['b1'] != $_POST['b2'] && md5($_POST['b1']) === md5($_POST['b2'])
+## **3**
+
+```php
+$_POST['b1'] != $_POST['b2'] && md5($_POST['b1']) === md5($_POST['b2'])
+```
 
 b1 != b2：不同数组互不相等，成立。
-
-md5($_POST['b1']) 与 md5($_POST['b2'])
 
 传数组给 md5() 会产生 warning 并返回 NULL（或非字符串）
 
@@ -68,7 +80,11 @@ md5($_POST['b1']) 与 md5($_POST['b2'])
 
 即利用了对不正确类型没有类型检查的行为!
 
-> 4.$_POST['c1'] != $_POST['c2'] && is_string($_POST['c1']) && is_string($_POST['c2']) && md5($_POST['c1']) == md5($_POST['c2'])
+## **4**
+
+ ```php
+ $_POST['c1'] != $_POST['c2'] && is_string($_POST['c1']) && is_string($_POST['c2']) && md5($_POST['c1']) == md5($_POST['c2'])
+ ```
 
 这里要求 c1 和 c2 是字符串（is_string），且两者不相等
 
@@ -120,7 +136,7 @@ perfect!😎
 
 > 复盘
 
-防御建议
+防御建议(学习思考一下)😁
 
 1.严格类型检查输入：
 
@@ -138,7 +154,9 @@ perfect!😎
 
 3.比较哈希时使用 hash_equals 与严格比较（并确保都是字符串）：
 
+```php
 if (is_string($h1) && is_string($h2) && hash_equals($h1, $h2)) { ... }
+```
 
 hash_equals 防止时序攻击外，加上 is_string 可避免 0e... 宽松比较问题。
 
@@ -156,7 +174,7 @@ hash_equals 防止时序攻击外，加上 is_string 可避免 0e... 宽松比�
 
 拒绝非期望类型。
 
-安全代码示例:
+安全代码示例:😋
 
 ```php
 <?php
@@ -196,5 +214,7 @@ if ($a !== null && preg_match('/^[0-9]+$/', $a) && intval($a) !== 0) {
 over~🥸
 
 感谢阅读！🥸
+
+嘀咕:排版真累...😇
 
 </div>
