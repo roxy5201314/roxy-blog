@@ -7,6 +7,7 @@ const MarkdownIt = require('markdown-it');
 
 // require the katex plugin (install markdown-it-katex and katex)
 const mdKatex = require('markdown-it-katex');
+const hljs = require('highlight.js');
 
 (function sanitizeSlug(s) {
     return s;
@@ -16,10 +17,26 @@ const mdKatex = require('markdown-it-katex');
     try {
         // create markdown-it instance and use the katex plugin
         const md = new MarkdownIt({
-            html: true,
-            linkify: true,
-            typographer: true,
-        }).use(mdKatex);
+    html: true,
+    linkify: true,
+    typographer: true,
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return `
+<pre class="hljs"><code class="language-${lang}">
+${hljs.highlight(str, { language: lang, ignoreIllegals: true }).value}
+</code></pre>`;
+            } catch (e) {}
+        }
+
+        // 没写语言 or 不认识 → 普通 code
+        return `
+<pre class="hljs"><code>
+${MarkdownIt().utils.escapeHtml(str)}
+</code></pre>`;
+    }
+}).use(mdKatex);
 
         const files = await fg('content/**/*.md');
         const items = [];

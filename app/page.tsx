@@ -1,5 +1,6 @@
 'use client';
 
+import ClickParticles from '@/components/ClickParticles';
 import React, { useEffect, useRef, useState } from 'react';
 
 const COVER_IMAGE = '/cover.jpg';
@@ -196,8 +197,7 @@ export default function Page() {
   };
 
   const renderNav = () => (
-    // 使用更友好的无衬线字体、调大字号并增加行高让目录更舒服
-    <nav className="bg-white/80 backdrop-blur rounded-lg p-4 shadow-sm relative overflow-hidden font-sans text-base leading-6">
+    <nav role="navigation" aria-label="Table of contents" className="bg-white/90 backdrop-blur rounded-lg p-4 shadow-sm relative overflow-hidden font-sans text-base leading-6">
       <h2 className="font-semibold mb-3 text-lg">目录</h2>
       <ul className="space-y-3 relative">
         <div
@@ -258,6 +258,9 @@ export default function Page() {
         })}
       </ul>
 
+
+
+
       {preview && (
         <div
           className="absolute right-2 top-0 transform translate-y-0 p-3 rounded-md bg-white shadow-lg text-sm max-w-xs animate-slide-in font-sans"
@@ -276,12 +279,8 @@ export default function Page() {
       return (
         <section key={id} id={id} tabIndex={-1} className="scroll-mt-20">
           <h2 className="text-2xl font-bold">{item.title}</h2>
-          {/* 这里把 excerpt 放大并使用更舒服的行高和无衬线字体 */}
           <p className="text-gray-600 text-lg md:text-xl mt-2 font-light leading-relaxed font-sans">{item.excerpt}</p>
-
-          {/* 将 "enjoy your read!" 放大并优化字重与行距 */}
           <p className="mt-6 text-lg md:text-2xl font-medium tracking-tight font-sans leading-relaxed">enjoy your read!😎😎😎</p>
-
           <div className="mt-4 bg-white/40 rounded-lg p-4">
             {articleHtml[id] ? (
               <div dangerouslySetInnerHTML={{ __html: articleHtml[id] }} />
@@ -295,10 +294,13 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
+        <ClickParticles />
+
       <header className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
-        <img src={COVER_IMAGE} alt="cover" className="absolute inset-0 w-full h-full object-cover scale-105" style={{ filter: 'blur(4px) brightness(0.85)' }} />
+        {/* use CSS class header-cover so your globals.css can control blur/scale */}
+        <img src={COVER_IMAGE} alt="cover" className="absolute inset-0 w-full h-full object-cover scale-105 header-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 h-full flex items-center">
+        <div className="relative z-20 max-w-6xl mx-auto px-6 h-full flex items-center">
           <div>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-md">roxy&apos;s blog</h1>
             <p className="mt-2 text-white/90">Notes, projects and things I care about.</p>
@@ -306,7 +308,8 @@ export default function Page() {
         </div>
       </header>
 
-      <aside className="hidden md:flex fixed left-6 top-1/2 -translate-y-1/2 w-64 z-40">
+      {/* IMPORTANT: raise z-index to ensure aside sits above any particle canvas */}
+      <aside className="hidden md:flex fixed left-6 top-1/2 -translate-y-1/2 w-64 z-50">
         <div ref={navRef} className="w-full max-h-[74vh] overflow-auto">{renderNav()}</div>
       </aside>
 

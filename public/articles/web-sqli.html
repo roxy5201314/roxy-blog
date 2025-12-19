@@ -14,31 +14,34 @@
 <p>题目来自dvwa靶场的sqli练习😳</p>
 <h1>low level</h1>
 <p>源码:</p>
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php">
+<pre class="hljs"><code class="language-php">
+<span class="hljs-meta">&lt;?php</span>
 
-if( isset( $_REQUEST[ 'Submit' ] ) ) {
-    // Get input
-    $id = $_REQUEST[ 'id' ];
+<span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;Submit&#x27;</span> ] ) ) {
+    <span class="hljs-comment">// Get input</span>
+    <span class="hljs-variable">$id</span> = <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;id&#x27;</span> ];
 
-    // Check database
-    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = '$id';&quot;;
-    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( '&lt;pre&gt;' . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '&lt;/pre&gt;' );
+    <span class="hljs-comment">// Check database</span>
+    <span class="hljs-variable">$query</span>  = <span class="hljs-string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="hljs-subst">$id</span>&#x27;;&quot;</span>;
+    <span class="hljs-variable">$result</span> = <span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>],  <span class="hljs-variable">$query</span> ) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>( <span class="hljs-string">&#x27;&lt;pre&gt;&#x27;</span> . ((<span class="hljs-title function_ invoke__">is_object</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>])) ? <span class="hljs-title function_ invoke__">mysqli_error</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="hljs-variable">$___mysqli_res</span> = <span class="hljs-title function_ invoke__">mysqli_connect_error</span>()) ? <span class="hljs-variable">$___mysqli_res</span> : <span class="hljs-literal">false</span>)) . <span class="hljs-string">&#x27;&lt;/pre&gt;&#x27;</span> );
 
-    // Get results
-    while( $row = mysqli_fetch_assoc( $result ) ) {
-        // Get values
-        $first = $row[&quot;first_name&quot;];
-        $last  = $row[&quot;last_name&quot;];
+    <span class="hljs-comment">// Get results</span>
+    <span class="hljs-keyword">while</span>( <span class="hljs-variable">$row</span> = <span class="hljs-title function_ invoke__">mysqli_fetch_assoc</span>( <span class="hljs-variable">$result</span> ) ) {
+        <span class="hljs-comment">// Get values</span>
+        <span class="hljs-variable">$first</span> = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;first_name&quot;</span>];
+        <span class="hljs-variable">$last</span>  = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;last_name&quot;</span>];
 
-        // Feedback for end user
-        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+        <span class="hljs-comment">// Feedback for end user</span>
+        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;ID: <span class="hljs-subst">{$id}</span>&lt;br /&gt;First name: <span class="hljs-subst">{$first}</span>&lt;br /&gt;Surname: <span class="hljs-subst">{$last}</span>&lt;/pre&gt;&quot;</span>;
     }
 
-    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
+    <span class="hljs-title function_ invoke__">mysqli_close</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]);
 }
 
-?&gt;
-</code></pre>
+<span class="hljs-meta">?&gt;</span>
+
+</code></pre></code></pre>
 <p>最简单的sql注入</p>
 <p>ps:你可能需要先了解一些sql语法(不过非常简单)</p>
 <blockquote>
@@ -88,39 +91,42 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
 <p>成功获得所有用户的密码!</p>
 <h2>medium level</h2>
 <p>源码</p>
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php">
+<pre class="hljs"><code class="language-php">
+<span class="hljs-meta">&lt;?php</span>
 
-if( isset( $_POST[ 'Submit' ] ) ) {
-    // Get input
-    $id = $_POST[ 'id' ];
+<span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_POST</span>[ <span class="hljs-string">&#x27;Submit&#x27;</span> ] ) ) {
+    <span class="hljs-comment">// Get input</span>
+    <span class="hljs-variable">$id</span> = <span class="hljs-variable">$_POST</span>[ <span class="hljs-string">&#x27;id&#x27;</span> ];
 
-    $id = mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;], $id);
+    <span class="hljs-variable">$id</span> = <span class="hljs-title function_ invoke__">mysqli_real_escape_string</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>], <span class="hljs-variable">$id</span>);
 
-    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id;&quot;;
-    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query) or die( '&lt;pre&gt;' . mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) . '&lt;/pre&gt;' );
+    <span class="hljs-variable">$query</span>  = <span class="hljs-string">&quot;SELECT first_name, last_name FROM users WHERE user_id = <span class="hljs-subst">$id</span>;&quot;</span>;
+    <span class="hljs-variable">$result</span> = <span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>], <span class="hljs-variable">$query</span>) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>( <span class="hljs-string">&#x27;&lt;pre&gt;&#x27;</span> . <span class="hljs-title function_ invoke__">mysqli_error</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]) . <span class="hljs-string">&#x27;&lt;/pre&gt;&#x27;</span> );
 
-    // Get results
-    while( $row = mysqli_fetch_assoc( $result ) ) {
-        // Display values
-        $first = $row[&quot;first_name&quot;];
-        $last  = $row[&quot;last_name&quot;];
+    <span class="hljs-comment">// Get results</span>
+    <span class="hljs-keyword">while</span>( <span class="hljs-variable">$row</span> = <span class="hljs-title function_ invoke__">mysqli_fetch_assoc</span>( <span class="hljs-variable">$result</span> ) ) {
+        <span class="hljs-comment">// Display values</span>
+        <span class="hljs-variable">$first</span> = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;first_name&quot;</span>];
+        <span class="hljs-variable">$last</span>  = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;last_name&quot;</span>];
 
-        // Feedback for end user
-        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+        <span class="hljs-comment">// Feedback for end user</span>
+        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;ID: <span class="hljs-subst">{$id}</span>&lt;br /&gt;First name: <span class="hljs-subst">{$first}</span>&lt;br /&gt;Surname: <span class="hljs-subst">{$last}</span>&lt;/pre&gt;&quot;</span>;
     }
 
 }
 
-// This is used later on in the index.php page
-// Setting it here so we can close the database connection in here like in the rest of the source scripts
-$query  = &quot;SELECT COUNT(*) FROM users;&quot;;
-$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( '&lt;pre&gt;' . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '&lt;/pre&gt;' );
-$number_of_rows = mysqli_fetch_row( $result )[0];
+<span class="hljs-comment">// This is used later on in the index.php page</span>
+<span class="hljs-comment">// Setting it here so we can close the database connection in here like in the rest of the source scripts</span>
+<span class="hljs-variable">$query</span>  = <span class="hljs-string">&quot;SELECT COUNT(*) FROM users;&quot;</span>;
+<span class="hljs-variable">$result</span> = <span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>],  <span class="hljs-variable">$query</span> ) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>( <span class="hljs-string">&#x27;&lt;pre&gt;&#x27;</span> . ((<span class="hljs-title function_ invoke__">is_object</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>])) ? <span class="hljs-title function_ invoke__">mysqli_error</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="hljs-variable">$___mysqli_res</span> = <span class="hljs-title function_ invoke__">mysqli_connect_error</span>()) ? <span class="hljs-variable">$___mysqli_res</span> : <span class="hljs-literal">false</span>)) . <span class="hljs-string">&#x27;&lt;/pre&gt;&#x27;</span> );
+<span class="hljs-variable">$number_of_rows</span> = <span class="hljs-title function_ invoke__">mysqli_fetch_row</span>( <span class="hljs-variable">$result</span> )[<span class="hljs-number">0</span>];
 
-mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
-?&gt;
+<span class="hljs-title function_ invoke__">mysqli_close</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]);
+<span class="hljs-meta">?&gt;</span>
 
-</code></pre>
+
+</code></pre></code></pre>
 <p>题目难度略微增加</p>
 <p>界面不再有表单提交</p>
 <p>改为了下拉选择(现实谁会这样😹😹)</p>
@@ -160,31 +166,34 @@ mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
 <p>成功!😎</p>
 <h2>high level</h2>
 <p>源码</p>
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php">
+<pre class="hljs"><code class="language-php">
+<span class="hljs-meta">&lt;?php</span>
 
-if( isset( $_SESSION [ 'id' ] ) ) {
-    // Get input
-    $id = $_SESSION[ 'id' ];
+<span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_SESSION</span> [ <span class="hljs-string">&#x27;id&#x27;</span> ] ) ) {
+    <span class="hljs-comment">// Get input</span>
+    <span class="hljs-variable">$id</span> = <span class="hljs-variable">$_SESSION</span>[ <span class="hljs-string">&#x27;id&#x27;</span> ];
 
-    // Check database
-    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;&quot;;
-    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query ) or die( '&lt;pre&gt;Something went wrong.&lt;/pre&gt;' );
+    <span class="hljs-comment">// Check database</span>
+    <span class="hljs-variable">$query</span>  = <span class="hljs-string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="hljs-subst">$id</span>&#x27; LIMIT 1;&quot;</span>;
+    <span class="hljs-variable">$result</span> = <span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>], <span class="hljs-variable">$query</span> ) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>( <span class="hljs-string">&#x27;&lt;pre&gt;Something went wrong.&lt;/pre&gt;&#x27;</span> );
 
-    // Get results
-    while( $row = mysqli_fetch_assoc( $result ) ) {
-        // Get values
-        $first = $row[&quot;first_name&quot;];
-        $last  = $row[&quot;last_name&quot;];
+    <span class="hljs-comment">// Get results</span>
+    <span class="hljs-keyword">while</span>( <span class="hljs-variable">$row</span> = <span class="hljs-title function_ invoke__">mysqli_fetch_assoc</span>( <span class="hljs-variable">$result</span> ) ) {
+        <span class="hljs-comment">// Get values</span>
+        <span class="hljs-variable">$first</span> = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;first_name&quot;</span>];
+        <span class="hljs-variable">$last</span>  = <span class="hljs-variable">$row</span>[<span class="hljs-string">&quot;last_name&quot;</span>];
 
-        // Feedback for end user
-        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+        <span class="hljs-comment">// Feedback for end user</span>
+        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;ID: <span class="hljs-subst">{$id}</span>&lt;br /&gt;First name: <span class="hljs-subst">{$first}</span>&lt;br /&gt;Surname: <span class="hljs-subst">{$last}</span>&lt;/pre&gt;&quot;</span>;
     }
 
-    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);        
+    ((<span class="hljs-title function_ invoke__">is_null</span>(<span class="hljs-variable">$___mysqli_res</span> = <span class="hljs-title function_ invoke__">mysqli_close</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&quot;___mysqli_ston&quot;</span>]))) ? <span class="hljs-literal">false</span> : <span class="hljs-variable">$___mysqli_res</span>);        
 }
 
-?&gt;
-</code></pre>
+<span class="hljs-meta">?&gt;</span>
+
+</code></pre></code></pre>
 <p>这次不看你的id了</p>
 <blockquote>
 <p>直接看你修改的$_SESSION[‘id’] 的值</p>
@@ -202,40 +211,43 @@ if( isset( $_SESSION [ 'id' ] ) ) {
 <p>成功!😎</p>
 <h2>impossible level</h2>
 <p>源码</p>
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php">
+<pre class="hljs"><code class="language-php">
+<span class="hljs-meta">&lt;?php</span>
 
-if( isset( $_GET[ 'Submit' ] ) ) {
-    // Check Anti-CSRF token
-    checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
+<span class="hljs-keyword">if</span>( <span class="hljs-keyword">isset</span>( <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;Submit&#x27;</span> ] ) ) {
+    <span class="hljs-comment">// Check Anti-CSRF token</span>
+    <span class="hljs-title function_ invoke__">checkToken</span>( <span class="hljs-variable">$_REQUEST</span>[ <span class="hljs-string">&#x27;user_token&#x27;</span> ], <span class="hljs-variable">$_SESSION</span>[ <span class="hljs-string">&#x27;session_token&#x27;</span> ], <span class="hljs-string">&#x27;index.php&#x27;</span> );
 
-    // Get input
-    $id = $_GET[ 'id' ];
+    <span class="hljs-comment">// Get input</span>
+    <span class="hljs-variable">$id</span> = <span class="hljs-variable">$_GET</span>[ <span class="hljs-string">&#x27;id&#x27;</span> ];
 
-    // Was a number entered?
-    if(is_numeric( $id )) {
-        // Check the database
-        $data = $db-&gt;prepare( 'SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;' );
-        $data-&gt;bindParam( ':id', $id, PDO::PARAM_INT );
-        $data-&gt;execute();
-        $row = $data-&gt;fetch();
+    <span class="hljs-comment">// Was a number entered?</span>
+    <span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">is_numeric</span>( <span class="hljs-variable">$id</span> )) {
+        <span class="hljs-comment">// Check the database</span>
+        <span class="hljs-variable">$data</span> = <span class="hljs-variable">$db</span>-&gt;<span class="hljs-title function_ invoke__">prepare</span>( <span class="hljs-string">&#x27;SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;&#x27;</span> );
+        <span class="hljs-variable">$data</span>-&gt;<span class="hljs-title function_ invoke__">bindParam</span>( <span class="hljs-string">&#x27;:id&#x27;</span>, <span class="hljs-variable">$id</span>, PDO::<span class="hljs-variable constant_">PARAM_INT</span> );
+        <span class="hljs-variable">$data</span>-&gt;<span class="hljs-title function_ invoke__">execute</span>();
+        <span class="hljs-variable">$row</span> = <span class="hljs-variable">$data</span>-&gt;<span class="hljs-title function_ invoke__">fetch</span>();
 
-        // Make sure only 1 result is returned
-        if( $data-&gt;rowCount() == 1 ) {
-            // Get values
-            $first = $row[ 'first_name' ];
-            $last  = $row[ 'last_name' ];
+        <span class="hljs-comment">// Make sure only 1 result is returned</span>
+        <span class="hljs-keyword">if</span>( <span class="hljs-variable">$data</span>-&gt;<span class="hljs-title function_ invoke__">rowCount</span>() == <span class="hljs-number">1</span> ) {
+            <span class="hljs-comment">// Get values</span>
+            <span class="hljs-variable">$first</span> = <span class="hljs-variable">$row</span>[ <span class="hljs-string">&#x27;first_name&#x27;</span> ];
+            <span class="hljs-variable">$last</span>  = <span class="hljs-variable">$row</span>[ <span class="hljs-string">&#x27;last_name&#x27;</span> ];
 
-            // Feedback for end user
-            echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+            <span class="hljs-comment">// Feedback for end user</span>
+            <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;ID: <span class="hljs-subst">{$id}</span>&lt;br /&gt;First name: <span class="hljs-subst">{$first}</span>&lt;br /&gt;Surname: <span class="hljs-subst">{$last}</span>&lt;/pre&gt;&quot;</span>;
         }
     }
 }
 
-// Generate Anti-CSRF token
-generateSessionToken();
+<span class="hljs-comment">// Generate Anti-CSRF token</span>
+<span class="hljs-title function_ invoke__">generateSessionToken</span>();
 
-?&gt;
-</code></pre>
+<span class="hljs-meta">?&gt;</span>
+
+</code></pre></code></pre>
 <p>ok观察这个源码</p>
 <p>发现:</p>
 <blockquote>

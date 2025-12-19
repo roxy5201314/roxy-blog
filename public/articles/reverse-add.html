@@ -23,39 +23,51 @@
 <p>CPU 到底是如何一步一步执行这个程序的？</p>
 </blockquote>
 <p>为了说明这一点，我们从一个几乎不能再简单的程序开始。🤭</p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
+<pre><code class="language-c">
+<pre class="hljs"><code class="language-c">
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 
-int add(int a, int b) {
-    return a + b;
+<span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
+    <span class="hljs-keyword">return</span> a + b;
 }
 
-int main() {
-    int x = 3;
-    int y = 4;
-    int z = add(x, y);
-    printf(&quot;%d\n&quot;, z);
-    return 0;
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> x = <span class="hljs-number">3</span>;
+    <span class="hljs-type">int</span> y = <span class="hljs-number">4</span>;
+    <span class="hljs-type">int</span> z = add(x, y);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, z);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
-</code></pre>
+
+</code></pre></code></pre>
 <p>让我们从汇编视角看看这样一个简单的函数调用小程序到底干了哪些事情</p>
 <h2>函数的入口</h2>
-<pre><code class="language-asm">push rbp
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+push rbp
 mov rbp, rsp
 sub rsp, 0x20
-</code></pre>
+
+</code></pre></code></pre>
 <p>这三条指令意味着一件事:</p>
 <p>一个函数开始了</p>
 <p>当前函数正在建立自己的栈帧</p>
 <p>在逆向中,只要看到这些,你就可以确定:这是一个函数的入口。</p>
 <h2>局部变量是怎么出现的？</h2>
 <p>源码中有：</p>
-<pre><code class="language-c">int x = 3;
-int y = 4;
-</code></pre>
+<pre><code class="language-c">
+<pre class="hljs"><code class="language-c">
+<span class="hljs-type">int</span> x = <span class="hljs-number">3</span>;
+<span class="hljs-type">int</span> y = <span class="hljs-number">4</span>;
+
+</code></pre></code></pre>
 <p>在汇编里，它们通常表现为：</p>
-<pre><code class="language-asm">mov DWORD PTR [rbp-0x4], 0x3
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+mov DWORD PTR [rbp-0x4], 0x3
 mov DWORD PTR [rbp-0x8], 0x4
-</code></pre>
+
+</code></pre></code></pre>
 <p>rbp 是当前函数<strong>栈帧</strong>的基址</p>
 <p>rbp-0x4、rbp-0x8 是局部变量</p>
 <p>常量 3、4 被直接写进栈内存</p>
@@ -69,28 +81,37 @@ mov DWORD PTR [rbp-0x8], 0x4
 <p>这块内存什么时候被写?什么时候被读?</p>
 </blockquote>
 <h2>函数调用与传参</h2>
-<pre><code class="language-c">z = add(x, y);
-</code></pre>
+<pre><code class="language-c">
+<pre class="hljs"><code class="language-c">
+z = add(x, y);
+
+</code></pre></code></pre>
 <p>在 x86-64 Linux 下，常见的汇编形式是:</p>
-<pre><code class="language-asm">mov eax, DWORD PTR [rbp-0x4]
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+mov eax, DWORD PTR [rbp-0x4]
 mov edi, eax
 mov eax, DWORD PTR [rbp-0x8]
 mov esi, eax
 call add
-</code></pre>
+
+</code></pre></code></pre>
 <p>关键:</p>
 <p>参数被送进<strong>寄存器</strong></p>
 <p>call 指令跳转到函数</p>
 <p>返回值会放在 eax / rax</p>
 <h2>函数中发生了什么?</h2>
 <p>add 函数的核心汇编通常非常短：</p>
-<pre><code class="language-asm">push rbp
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+push rbp
 mov rbp, rsp
 mov eax, edi
 add eax, esi
 pop rbp
 ret
-</code></pre>
+
+</code></pre></code></pre>
 <p>edi放着第一个参数 a</p>
 <p>esi放着第二个参数 b</p>
 <p>而eax是返回值寄存器</p>
@@ -101,10 +122,13 @@ ret
 <p>到这里你应该意识到一件事：</p>
 <p>C 语言的 return，本质上只是把值放进 eax!</p>
 <h2><span style="color:blue">pwn与逆向的联系</span></h2>
-<pre><code class="language-asm">call add
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+call add
 ...
 ret
-</code></pre>
+
+</code></pre></code></pre>
 <p>call 会：</p>
 <p>把返回地址压栈</p>
 <p>跳转到目标函数</p>
@@ -118,8 +142,11 @@ ret
 <p>pwn 和逆向,在这里,产生了交集!</p>
 </blockquote>
 <h2>printf从何而来?</h2>
-<pre><code class="language-asm">call printf@plt
-</code></pre>
+<pre><code class="language-asm">
+<pre class="hljs"><code>
+call printf@plt
+
+</code></pre></code></pre>
 <p>printf 不在当前程序里</p>
 <p>它来自 libc 动态链接库</p>
 <p>这里只是通过 PLT 进行一次跳转</p>

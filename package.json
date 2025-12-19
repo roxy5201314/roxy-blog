@@ -9,14 +9,22 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "framer-motion": "^12.23.26",
+    "giscus": "^1.6.0",
+    "highlight.js": "^11.11.1",
+    "markdown-it-katex": "^2.0.3",
     "next": "16.0.8",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "react-tsparticles": "^2.12.2",
+    "rehype-highlight": "^7.0.2",
     "rehype-katex": "^7.0.1",
     "rehype-stringify": "^10.0.1",
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "tsparticles": "^3.9.1",
     "unified": "^11.0.5"
   },
   "devDependencies": {
@@ -31,7 +39,6 @@
     "gray-matter": "^4.0.3",
     "katex": "^0.16.27",
     "markdown-it": "^14.1.0",
-    "markdown-it-katex": "^2.0.3",
     "postcss": "^8.5.6",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",

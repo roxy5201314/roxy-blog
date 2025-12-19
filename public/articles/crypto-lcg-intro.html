@@ -92,17 +92,20 @@
 <li>在CTF中，破解LCG的关键在于利用连续的输出值，通过解模运算方程来恢复未知参数 <code>(a, c, m, seed)</code>。</li>
 </ul>
 <p>一个简单的Python实现示例：</p>
-<pre><code class="language-python">class LCG:
-    def __init__(self, seed, a, c, m):
-        self.state = seed
-        self.a = a
-        self.c = c
-        self.m = m
+<pre><code class="language-python">
+<pre class="hljs"><code class="language-python">
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LCG</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, seed, a, c, m</span>):
+        <span class="hljs-variable language_">self</span>.state = seed
+        <span class="hljs-variable language_">self</span>.a = a
+        <span class="hljs-variable language_">self</span>.c = c
+        <span class="hljs-variable language_">self</span>.m = m
 
-    def next(self):
-        self.state = (self.a * self.state + self.c) % self.m
-        return self.state
-</code></pre>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">next</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-variable language_">self</span>.state = (<span class="hljs-variable language_">self</span>.a * <span class="hljs-variable language_">self</span>.state + <span class="hljs-variable language_">self</span>.c) % <span class="hljs-variable language_">self</span>.m
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.state
+
+</code></pre></code></pre>
 <blockquote>
 <p>记住，看到连续的、模某个大数的随机数，先想想是不是LCG！</p>
 </blockquote>

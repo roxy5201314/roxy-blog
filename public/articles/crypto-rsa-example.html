@@ -11,23 +11,26 @@
 <div class="intro-article">
 <h1><strong>相当于我的题解</strong>😂😂</h1>
 <p>先给出题目:</p>
-<pre><code class="language-python">//cipher.py
-from Crypto.Util.number import * 
-from gmpy2 import * 
-with open(&quot;/home/ctf/flag&quot;, &quot;r&quot;) as f: 
+<pre><code class="language-python">
+<pre class="hljs"><code class="language-python">
+//cipher.py
+<span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> * 
+<span class="hljs-keyword">from</span> gmpy2 <span class="hljs-keyword">import</span> * 
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;/home/ctf/flag&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>) <span class="hljs-keyword">as</span> f: 
 flag = f.read().strip().encode() 
 m = bytes_to_long(flag) 
-p = getPrime(512) 
+p = getPrime(<span class="hljs-number">512</span>) 
 q = next_prime(p) 
 n = p * q 
-e = 0x10001 
-d = inverse(e, (p-1) * (q-1)) 
-c = pow(m, e, n) 
-print(f&quot;c = {c}&quot;) 
-print(f&quot;d = {d}&quot;) 
-c = 2382475417612221029195991422974637682790907959505872057612789600021232022809557015773490645186824472471102983790148757867812357803783967352960757619002038826907060092309775753732723354584179093707192435729752294617650638277041714861100817616820264627123087547545127802637327100886413921708433926850797315065 
-d = 25870330341587644557506269425904862005091761270098246437027336498404986684820747768161278804893693431118462970977749986507893638555530406810784167861241466417073720713120287069835276598399825459462715213456508074868393454518636408061277002175376013587646496781389777927884174769153760862313567065511810387073
-</code></pre>
+e = <span class="hljs-number">0x10001</span> 
+d = inverse(e, (p-<span class="hljs-number">1</span>) * (q-<span class="hljs-number">1</span>)) 
+c = <span class="hljs-built_in">pow</span>(m, e, n) 
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;c = <span class="hljs-subst">{c}</span>&quot;</span>) 
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;d = <span class="hljs-subst">{d}</span>&quot;</span>) 
+c = <span class="hljs-number">2382475417612221029195991422974637682790907959505872057612789600021232022809557015773490645186824472471102983790148757867812357803783967352960757619002038826907060092309775753732723354584179093707192435729752294617650638277041714861100817616820264627123087547545127802637327100886413921708433926850797315065</span> 
+d = <span class="hljs-number">25870330341587644557506269425904862005091761270098246437027336498404986684820747768161278804893693431118462970977749986507893638555530406810784167861241466417073720713120287069835276598399825459462715213456508074868393454518636408061277002175376013587646496781389777927884174769153760862313567065511810387073</span>
+
+</code></pre></code></pre>
 <h2>分析题目逻辑:</h2>
 <ol>
 <li>泄露了私钥指数 d</li>
@@ -99,59 +102,62 @@ d = 2587033034158764455750626942590486200509176127009824643702733649840498668482
 </blockquote>
 <p>即可得到最终 flag!😜😜</p>
 <h2>最终脚本☺️</h2>
-<pre><code class="language-python">//exploit.py
-from Crypto.Util.number import *
-from gmpy2 import is_prime, iroot, next_prime
-#见题目
-c = 2382475417612221029195991422974637682790907959505872057612...
-d = 2587033034158764455750626942590486200509176127009824643...
-e = 65537
+<pre><code class="language-python">
+<pre class="hljs"><code class="language-python">
+//exploit.py
+<span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *
+<span class="hljs-keyword">from</span> gmpy2 <span class="hljs-keyword">import</span> is_prime, iroot, next_prime
+<span class="hljs-comment">#见题目</span>
+c = <span class="hljs-number">2382475417612221029195991422974637682790907959505872057612.</span>..
+d = <span class="hljs-number">2587033034158764455750626942590486200509176127009824643.</span>..
+e = <span class="hljs-number">65537</span>
 
-k = e*d - 1
+k = e*d - <span class="hljs-number">1</span>
 
-# 枚举小因子
-for t in range(1, 20000):
-    if k % t != 0:
-        continue
+<span class="hljs-comment"># 枚举小因子</span>
+<span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">20000</span>):
+    <span class="hljs-keyword">if</span> k % t != <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">continue</span>
 
     phi = k // t
 
-    # 枚举 g = q - p
-    for g in range(1, 2000):
-        # 二次方程: p^2 + (g-2)p + (1-g) - phi = 0
-        a = 1
-        b = g - 2
-        c2 = (1 - g) - phi
+    <span class="hljs-comment"># 枚举 g = q - p</span>
+    <span class="hljs-keyword">for</span> g <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2000</span>):
+        <span class="hljs-comment"># 二次方程: p^2 + (g-2)p + (1-g) - phi = 0</span>
+        a = <span class="hljs-number">1</span>
+        b = g - <span class="hljs-number">2</span>
+        c2 = (<span class="hljs-number">1</span> - g) - phi
 
-        # 求 Δ
-        D = b*b - 4*a*c2
-        if D &lt; 0:
-            continue
+        <span class="hljs-comment"># 求 Δ</span>
+        D = b*b - <span class="hljs-number">4</span>*a*c2
+        <span class="hljs-keyword">if</span> D &lt; <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">continue</span>
 
-        r, ok = iroot(D, 2)
-        if not ok:
-            continue
+        r, ok = iroot(D, <span class="hljs-number">2</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ok:
+            <span class="hljs-keyword">continue</span>
 
-        # 求解 p
-        p = (-b + r) // 2
-        if p &lt;= 0:
-            continue
+        <span class="hljs-comment"># 求解 p</span>
+        p = (-b + r) // <span class="hljs-number">2</span>
+        <span class="hljs-keyword">if</span> p &lt;= <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">continue</span>
 
-        if not is_prime(p):
-            continue
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> is_prime(p):
+            <span class="hljs-keyword">continue</span>
 
         q = next_prime(p)
-        if (p-1)*(q-1) != phi:
-            continue
+        <span class="hljs-keyword">if</span> (p-<span class="hljs-number">1</span>)*(q-<span class="hljs-number">1</span>) != phi:
+            <span class="hljs-keyword">continue</span>
 
-        print(&quot;[+] Found p =&quot;, p)
-        print(&quot;[+] Found q =&quot;, q)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[+] Found p =&quot;</span>, p)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;[+] Found q =&quot;</span>, q)
 
         n = p*q
-        m = pow(c, d, n)
-        print(long_to_bytes(m))
+        m = <span class="hljs-built_in">pow</span>(c, d, n)
+        <span class="hljs-built_in">print</span>(long_to_bytes(m))
         exit()
-</code></pre>
+
+</code></pre></code></pre>
 <p>得到:</p>
 <blockquote>
 <p>XSWCTF{YOu_KnOW_H0w_To_f4CTOrIZe_PHl}</p>
@@ -196,21 +202,24 @@ for t in range(1, 20000):
 <p><strong>通常很快就能得到结果…</strong></p>
 <p>可以自行搜索资料…☺️</p>
 <p>代码实现:</p>
-<pre><code class="language-python">exploit.py
-import gmpy2
+<pre><code class="language-python">
+<pre class="hljs"><code class="language-python">
+exploit.py
+<span class="hljs-keyword">import</span> gmpy2
 
-def fermat(n):
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">fermat</span>(<span class="hljs-params">n</span>):
     a = gmpy2.isqrt(n)
-    if a * a &lt; n:
-        a += 1
+    <span class="hljs-keyword">if</span> a * a &lt; n:
+        a += <span class="hljs-number">1</span>
 
-    while True:
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
         b2 = a * a - n
         b = gmpy2.isqrt(b2)
-        if b * b == b2:
-            return a - b, a + b
-        a += 1
-</code></pre>
+        <span class="hljs-keyword">if</span> b * b == b2:
+            <span class="hljs-keyword">return</span> a - b, a + b
+        a += <span class="hljs-number">1</span>
+
+</code></pre></code></pre>
 <p><em>that is end</em>☺️</p>
 <p>感谢阅读!☺️</p>
 </div>
